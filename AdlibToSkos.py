@@ -101,8 +101,6 @@ for concept in rdf.childNodes:
                         property_dict[label] = [attribute_value]
 #         print concept_id ,property_dict
         hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
-        if concept_id == 'http://hdl.handle.net/10934/RM0001.THESAU.551587':
-            print property_dict
         if concept_id in hierarchy_dict:
             for h_label in hierarchy_labels:
                 if h_label in property_dict and h_label in hierarchy_dict[concept_id]:
