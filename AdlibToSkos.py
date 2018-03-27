@@ -52,8 +52,8 @@ for o_concept in o_rdf.childNodes:
                     else:
                         hierarchy_dict[prop_attr][prop_name].append(o_concept_id)
 
-print hierarchy_dict['http://hdl.handle.net/10934/RM0001.THESAU.551587'] 
-print full_list_of_concepts                         
+#print hierarchy_dict
+#print full_list_of_concepts                         
 # print scheme_values
                     
 #Scheme name from the attribute = [42:]
