@@ -7,19 +7,28 @@ import os
 import csv
 from xml.dom.minidom import parse
 from shutil import copyfile
+from datetime import datetime
+startTime = datetime.now()
 
 orginial_file = 'R_thesaurus_material_20180221.rdf'
-transformed_file = 'Material_Transformed.rdf'
-issue_file = 'differences_file.csv'
+transformed_file = 'Material_transformed.rdf'
+issue_file = 'differences_materials.csv'
+
+def change_file(root, file):
+    xml_file = open(file, "w")
+    xml_file.write(root.toprettyxml().encode("utf-8"))
+    xml_file.close()
 
 os.chdir('../thesaurus_export')
 dom = parse(orginial_file)
 o_rdf = dom.childNodes.item(0)
 scheme_values = []
 hierarchy_dict = {}
+full_list_of_concepts = []
 for o_concept in o_rdf.childNodes:
     if o_concept.nodeType == o_concept.ELEMENT_NODE:
         o_concept_id = o_concept.attributes.items()[0][1]
+        full_list_of_concepts.append(o_concept_id)
         for o_property in o_concept.childNodes:
             if o_property.nodeType == o_property.ELEMENT_NODE:
                 if o_property.nodeName == 'skos:inScheme':
@@ -43,8 +52,8 @@ for o_concept in o_rdf.childNodes:
                     else:
                         hierarchy_dict[prop_attr][prop_name].append(o_concept_id)
 
-print hierarchy_dict
-                         
+print hierarchy_dict['http://hdl.handle.net/10934/RM0001.THESAU.551587'] 
+print full_list_of_concepts                         
 # print scheme_values
                     
 #Scheme name from the attribute = [42:]
@@ -63,12 +72,10 @@ for schemes in scheme_values:
     scheme_node.setAttribute('rdf:about', schemes)
     concept_node = n_dom.createElement('dct:title')
     scheme_node.appendChild(concept_node)
-    concept_node.setAttribute('xml:lang', 'en')
+    concept_node.setAttribute('xml:lang', 'nl')
     text_node = n_dom.createTextNode(schemes[42:])
     concept_node.appendChild(text_node)
-    xml_file = open(transformed_file, "w")
-    xml_file.write(n_dom.toprettyxml().encode("utf-8"))
-    xml_file.close()
+    change_file(n_dom, transformed_file)
 for concept in rdf.childNodes:
     if concept.nodeName == 'skos:ConceptScheme':
         continue
@@ -83,7 +90,7 @@ for concept in rdf.childNodes:
                 if property.hasChildNodes():
                     childs = property.childNodes # property with value have a child node that contain the value. Example: prefLabel = goud
                 elif property.nodeName == 'skos:topConceptOf':
-                    t = property
+                    continue
                 else:
                     label = property.nodeName
                     attribute_value = property.attributes.items()[0][1]
@@ -92,8 +99,10 @@ for concept in rdf.childNodes:
                         property_dict[label].append(attribute_value)
                     else:                        
                         property_dict[label] = [attribute_value]
-        print concept_id ,property_dict
+#         print concept_id ,property_dict
         hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
+        if concept_id == 'http://hdl.handle.net/10934/RM0001.THESAU.551587':
+            print property_dict
         if concept_id in hierarchy_dict:
             for h_label in hierarchy_labels:
                 if h_label in property_dict and h_label in hierarchy_dict[concept_id]:
@@ -102,36 +111,142 @@ for concept in rdf.childNodes:
                     if difference != []:
                         difference_list = [concept_id, h_label, difference]
                         full_list_of_differnces.append(difference_list)
-#                         print difference
-#                         print length_property
-                        for prop_differ in difference:
-                            property_dict[h_label].remove(prop_differ)
+                        a_remove_list = []
+                        for a_difference in difference:
+                            if a_difference in full_list_of_concepts:
+                                if a_difference in property_dict[h_label]:
+                                    for another_concept in rdf.childNodes:
+                                        if another_concept.nodeName == 'skos:ConceptScheme':
+                                            continue
+                                        if another_concept.nodeType == another_concept.ELEMENT_NODE:
+                                            another_concept_id = another_concept.attributes.items()[0][1]
+                                            if another_concept_id == a_difference:
+                                                if h_label == 'skos:broader':
+                                                    new_node = n_dom.createElement('skos:narrower')
+                                                    another_concept.appendChild(new_node)
+                                                    new_node.setAttribute('rdf:resource', concept_id)
+                                                    change_file(n_dom, transformed_file)
+                                                elif h_label == 'skos:narrower':
+                                                    new_node = n_dom.createElement('skos:broader')
+                                                    another_concept.appendChild(new_node)
+                                                    new_node.setAttribute('rdf:resource', concept_id)
+                                                    change_file(n_dom, transformed_file)
+                                                elif h_label == 'skos:related':
+                                                    new_node = n_dom.createElement('skos:related')
+                                                    another_concept.appendChild(new_node)
+                                                    new_node.setAttribute('rdf:resource', concept_id)
+                                                    change_file(n_dom, transformed_file)
+                                else:
+                                    if h_label in property_dict:
+                                        property_dict[h_label].append(a_difference)
+                                    else:
+                                        property_dict[h_label] = [a_difference]
+                                    new_node = n_dom.createElement(h_label)
+                                    concept.appendChild(new_node)
+                                    new_node.setAttribute('rdf:resource', a_difference)
+                                    change_file(n_dom, transformed_file)
+                            else:
+                                a_remove_list.append(a_difference)
+                                if len(property_dict[h_label]) < 1:
+                                    del property_dict[h_label]
+                                for w_property in concept.childNodes:
+                                    if w_property.nodeType == w_property.ELEMENT_NODE:
+                                        if w_property.nodeName == h_label and w_property.attributes.items()[0][1] == a_difference:
+                                            concept.removeChild(w_property)
+                                            change_file(n_dom, transformed_file)
+                        for z_concept in a_remove_list:
+                            property_dict[h_label].remove(z_concept)
+                        if h_label in property_dict:
                             if len(property_dict[h_label]) < 1:
                                 del property_dict[h_label]
-                            for w_property in concept.childNodes:
-                                if w_property.nodeType == w_property.ELEMENT_NODE:
-                                    if w_property.nodeName == h_label and w_property.attributes.items()[0][1] == prop_differ:
-                                        concept.removeChild(w_property)
-                                        xml_file = open(transformed_file, "w")
-                                        xml_file.write(n_dom.toprettyxml().encode("utf-8"))
-                                        xml_file.close()
                 elif h_label not in property_dict and h_label in hierarchy_dict[concept_id]:
                     difference_list = [concept_id, h_label,hierarchy_dict[concept_id][h_label]]
                     full_list_of_differnces.append(difference_list)
+                    for t_dif in hierarchy_dict[concept_id][h_label]:
+                        if h_label in property_dict:
+                            property_dict[h_label].append(t_dif)
+                        else:
+                            property_dict[h_label] = [t_dif]
+                        new_node = n_dom.createElement(h_label)
+                        concept.appendChild(new_node)
+                        new_node.setAttribute('rdf:resource', t_dif)
+                        change_file(n_dom, transformed_file)
                 elif h_label in property_dict and h_label not in hierarchy_dict[concept_id]:
                     difference_list = [concept_id, h_label,property_dict[h_label]]
                     full_list_of_differnces.append(difference_list)
-                else:
-                    continue
-#         print concept_id, property_dict
+                    q_remove_list = []
+                    for r_dif in property_dict[h_label]:
+                        if r_dif in full_list_of_concepts:
+                            for q_concept in rdf.childNodes:
+                                if q_concept.nodeName == 'skos:ConceptScheme':
+                                    continue
+                                if q_concept.nodeType == q_concept.ELEMENT_NODE:
+                                    q_concept_id = q_concept.attributes.items()[0][1]
+                                    if q_concept_id == r_dif:
+                                        if h_label == 'skos:broader':
+                                            new_node = n_dom.createElement('skos:narrower')
+                                            q_concept.appendChild(new_node)
+                                            new_node.setAttribute('rdf:resource', concept_id)
+                                            change_file(n_dom, transformed_file)
+                                        elif h_label == 'skos:narrower':
+                                            new_node = n_dom.createElement('skos:broader')
+                                            q_concept.appendChild(new_node)
+                                            new_node.setAttribute('rdf:resource', concept_id)
+                                            change_file(n_dom, transformed_file)
+                                        elif h_label == 'skos:related':
+                                            new_node = n_dom.createElement('skos:related')
+                                            q_concept.appendChild(new_node)
+                                            new_node.setAttribute('rdf:resource', concept_id)
+                                            change_file(n_dom, transformed_file)
+                        else:
+                            q_remove_list.append(r_dif)
+                            for w_property in concept.childNodes:
+                                if w_property.nodeType == w_property.ELEMENT_NODE:
+                                    if w_property.nodeName == h_label and w_property.attributes.items()[0][1] == r_dif:
+                                        concept.removeChild(w_property)
+                                        change_file(n_dom, transformed_file)
+                    for z_concept in q_remove_list:
+                        property_dict[h_label].remove(z_concept)
+                    if h_label in property_dict:
+                        if len(property_dict[h_label]) < 1:
+                            del property_dict[h_label]
+        else:
+            for t_label in hierarchy_labels:
+                if t_label in property_dict:
+                    difference_list = [concept_id, t_label,property_dict[t_label]]
+                    full_list_of_differnces.append(difference_list)
+                    remove_list = []
+                    for r_concept in property_dict[t_label]:
+                        if r_concept in full_list_of_concepts:
+                            if t_label == 'skos:broader':
+                                t_label = 'skos:narrower'
+                            elif t_label == 'skos:narrower':
+                                t_label = 'skos:broader'
+                            for w_concept in rdf.childNodes:
+                                if w_concept.nodeType == w_concept.ELEMENT_NODE:
+                                    w_concept_id = w_concept.attributes.items()[0][1]
+                                    if w_concept_id == r_concept:
+                                        new_node = n_dom.createElement(t_label)
+                                        w_concept.appendChild(new_node)
+                                        new_node.setAttribute('rdf:resource', concept_id)
+                                        change_file(n_dom, transformed_file)
+                        else:
+                            remove_list.append(r_concept)
+                            for w_property in concept.childNodes:
+                                if w_property.nodeType == w_property.ELEMENT_NODE:
+                                    if w_property.nodeName == t_label and w_property.attributes.items()[0][1] == r_concept:
+                                        concept.removeChild(w_property)
+                                        change_file(n_dom, transformed_file)
+                    for z_concept in remove_list:
+                        property_dict[t_label].remove(z_concept)
+                    if t_label in property_dict:
+                        if len(property_dict[t_label]) < 1:
+                            del property_dict[t_label]
         if 'skos:broader' not in property_dict:
             for scheme in property_dict['skos:inScheme']:
                 new_node = n_dom.createElement('skos:topConceptOf')
                 concept.appendChild(new_node)
                 new_node.setAttribute('rdf:resource', scheme)
-#                 xml_file = open(transformed_file, "w")
-#                 xml_file.write(n_dom.toprettyxml().encode("utf-8"))
-#                 xml_file.close()
                 for a_concept in rdf.childNodes:
                     if a_concept.nodeType == a_concept.ELEMENT_NODE:
                         if a_concept.nodeName == 'skos:ConceptScheme':
@@ -140,9 +255,7 @@ for concept in rdf.childNodes:
                                 extra_node = n_dom.createElement('skos:hasTopConcept')
                                 a_concept.appendChild(extra_node)
                                 extra_node.setAttribute('rdf:resource', concept_id)
-                                xml_file = open(transformed_file, "w")
-                                xml_file.write(n_dom.toprettyxml().encode("utf-8"))
-                                xml_file.close()
+                                change_file(n_dom, transformed_file)
         
 header_list = ['concept 1', 'type of relation', 'concept 2']
 d_file  = open(issue_file, "wb")
@@ -151,7 +264,8 @@ writer.writerow(header_list)
 for d in full_list_of_differnces:
     writer.writerow(d)
 d_file.close()          
-            
+
+print datetime.now() - startTime
 
                  
  
