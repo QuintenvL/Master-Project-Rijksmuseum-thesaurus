@@ -10,9 +10,10 @@ from shutil import copyfile
 from datetime import datetime
 startTime = datetime.now()
 
-orginial_file = 'R_thesaurus_material_20180221.rdf'
-transformed_file = 'Material_transformed.rdf'
-issue_file = 'differences_materials.csv'
+orginial_file = 'full_skos.rdf'
+transformed_file = 'Full_transformed.rdf'
+issue_file = 'full_differences.csv'
+missing_file = 'full_missing.csv'
 
 def change_file(root, file):
     xml_file = open(file, "w")
@@ -22,7 +23,7 @@ def change_file(root, file):
 os.chdir('../thesaurus_export')
 dom = parse(orginial_file)
 o_rdf = dom.childNodes.item(0)
-scheme_values = []
+scheme_values = ['Unknown']
 hierarchy_dict = {}
 full_list_of_concepts = []
 for o_concept in o_rdf.childNodes:
@@ -52,30 +53,41 @@ for o_concept in o_rdf.childNodes:
                     else:
                         hierarchy_dict[prop_attr][prop_name].append(o_concept_id)
 
-#print hierarchy_dict
-#print full_list_of_concepts                         
+# print hierarchy_dict
+# print full_list_of_concepts                         
 # print scheme_values
                     
 #Scheme name from the attribute = [42:]
 
 
 copyfile(orginial_file, transformed_file)
-  
-# print type(parse('transformed.rdf'))
+
 full_list_of_differnces = []
+typeless_concepts = []
 n_dom = parse(transformed_file)
 childs = n_dom.childNodes
 rdf = childs.item(0)
 for schemes in scheme_values:
-    scheme_node = n_dom.createElement('skos:ConceptScheme')
-    rdf.appendChild(scheme_node)
-    scheme_node.setAttribute('rdf:about', schemes)
-    concept_node = n_dom.createElement('dct:title')
-    scheme_node.appendChild(concept_node)
-    concept_node.setAttribute('xml:lang', 'nl')
-    text_node = n_dom.createTextNode(schemes[42:])
-    concept_node.appendChild(text_node)
-    change_file(n_dom, transformed_file)
+    if schemes == 'Unknown':
+        scheme_node = n_dom.createElement('skos:ConceptScheme')
+        rdf.appendChild(scheme_node)
+        scheme_node.setAttribute('rdf:about', schemes)
+        concept_node = n_dom.createElement('dct:title')
+        scheme_node.appendChild(concept_node)
+        concept_node.setAttribute('xml:lang', 'nl')
+        text_node = n_dom.createTextNode(schemes)
+        concept_node.appendChild(text_node)
+        change_file(n_dom, transformed_file)
+    else:
+        scheme_node = n_dom.createElement('skos:ConceptScheme')
+        rdf.appendChild(scheme_node)
+        scheme_node.setAttribute('rdf:about', schemes)
+        concept_node = n_dom.createElement('dct:title')
+        scheme_node.appendChild(concept_node)
+        concept_node.setAttribute('xml:lang', 'nl')
+        text_node = n_dom.createTextNode(schemes[42:])
+        concept_node.appendChild(text_node)
+        change_file(n_dom, transformed_file)
 for concept in rdf.childNodes:
     if concept.nodeName == 'skos:ConceptScheme':
         continue
@@ -100,6 +112,8 @@ for concept in rdf.childNodes:
                     else:                        
                         property_dict[label] = [attribute_value]
 #         print concept_id ,property_dict
+        if 'skos:inScheme' not in property_dict:
+            typeless_concepts.append(concept_id)
         hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
         if concept_id in hierarchy_dict:
             for h_label in hierarchy_labels:
@@ -241,27 +255,48 @@ for concept in rdf.childNodes:
                         if len(property_dict[t_label]) < 1:
                             del property_dict[t_label]
         if 'skos:broader' not in property_dict:
-            for scheme in property_dict['skos:inScheme']:
+            if 'skos:inScheme' in property_dict:
+                for scheme in property_dict['skos:inScheme']: #problem if concept doesn't have InScheme property
+                    new_node = n_dom.createElement('skos:topConceptOf')
+                    concept.appendChild(new_node)
+                    new_node.setAttribute('rdf:resource', scheme)
+                    for a_concept in rdf.childNodes:
+                        if a_concept.nodeType == a_concept.ELEMENT_NODE:
+                            if a_concept.nodeName == 'skos:ConceptScheme':
+                                attr_value = a_concept.attributes.items()[0][1]
+                                if attr_value == scheme:
+                                    extra_node = n_dom.createElement('skos:hasTopConcept')
+                                    a_concept.appendChild(extra_node)
+                                    extra_node.setAttribute('rdf:resource', concept_id)
+                                    change_file(n_dom, transformed_file)
+            else:
                 new_node = n_dom.createElement('skos:topConceptOf')
                 concept.appendChild(new_node)
-                new_node.setAttribute('rdf:resource', scheme)
+                new_node.setAttribute('rdf:resource', 'Unknown')
                 for a_concept in rdf.childNodes:
                     if a_concept.nodeType == a_concept.ELEMENT_NODE:
                         if a_concept.nodeName == 'skos:ConceptScheme':
                             attr_value = a_concept.attributes.items()[0][1]
-                            if attr_value == scheme:
+                            if attr_value == 'Unknown':
                                 extra_node = n_dom.createElement('skos:hasTopConcept')
                                 a_concept.appendChild(extra_node)
                                 extra_node.setAttribute('rdf:resource', concept_id)
                                 change_file(n_dom, transformed_file)
-        
+                                
+            
 header_list = ['concept 1', 'type of relation', 'concept 2']
 d_file  = open(issue_file, "wb")
 writer = csv.writer(d_file) 
 writer.writerow(header_list)
 for d in full_list_of_differnces:
     writer.writerow(d)
-d_file.close()          
+d_file.close()
+
+b_file  = open(missing_file, "wb")
+the_writer = csv.writer(b_file) 
+for missing in typeless_concepts:
+    the_writer.writerow(missing)
+b_file.close()              
 
 print datetime.now() - startTime
 
