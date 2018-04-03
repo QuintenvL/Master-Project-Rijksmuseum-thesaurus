@@ -100,7 +100,7 @@ for concept in rdf.childNodes:
         for property in concept_properties:
             if property.nodeType == property.ELEMENT_NODE:
                 if property.hasChildNodes():
-                    childs = property.childNodes # property with value have a child node that contain the value. Example: prefLabel = goud
+                    continue # property with value have a child node that contain the value. Example: prefLabel = goud
                 elif property.nodeName == 'skos:topConceptOf':
                     continue
                 else:
