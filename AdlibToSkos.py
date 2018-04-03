@@ -159,8 +159,6 @@ for concept in rdf.childNodes:
                                     change_file(n_dom, transformed_file)
                             else:
                                 a_remove_list.append(a_difference)
-                                if len(property_dict[h_label]) < 1:
-                                    del property_dict[h_label]
                                 for w_property in concept.childNodes:
                                     if w_property.nodeType == w_property.ELEMENT_NODE:
                                         if w_property.nodeName == h_label and w_property.attributes.items()[0][1] == a_difference:
