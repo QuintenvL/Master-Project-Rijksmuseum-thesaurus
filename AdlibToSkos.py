@@ -4,7 +4,7 @@ Created on 13 mrt. 2018
 @author: Gebruiker
 '''
 # Import all necessary packages
-import os 
+import os
 import csv
 from xml.dom.minidom import parse
 from shutil import copyfile
@@ -13,11 +13,11 @@ from datetime import datetime
 startTime = datetime.now()
 
 # The name specifications of the used and created files
-orginial_file = 'full_skos.rdf'
+orginial_file = 'rma-skos-thesaurus.rdf'
 transformed_file = 'Full_transformed.rdf'
 issue_file = 'full_differences.csv'
 missing_file = 'full_missing.csv'
-os.chdir('../thesaurus_export') # The location to store and access the files
+os.chdir('thesaurus') # The location to store and access the files
 
 # Definition that opens a XML file and updates the changes made
 def change_file(root, file):
@@ -108,7 +108,7 @@ for concept in root.childNodes:
             if property.nodeType == property.ELEMENT_NODE:
 #Properties with text nodes or other nodes and the skos:topConceptOf nodes are excluded from the property dictionary
                 if property.hasChildNodes():
-                    continue 
+                    continue
                 elif property.nodeName == 'skos:topConceptOf':
                     continue
                 else:
@@ -116,7 +116,7 @@ for concept in root.childNodes:
                     attribute_value = property.attributes.items()[0][1]
                     if label in property_dict:
                         property_dict[label].append(attribute_value)
-                    else:                        
+                    else:
                         property_dict[label] = [attribute_value]
 # All concepts without the skos:inScheme property are added to the list of typeless concepts
         if 'skos:inScheme' not in property_dict:
@@ -136,7 +136,7 @@ for concept in root.childNodes:
                         a_remove_list = []
                         for a_difference in difference:
                             if a_difference in full_list_of_concepts:
-# If the difference concept is missing the difference, a new property node will be added to the concept node that missed the relation property. 
+# If the difference concept is missing the difference, a new property node will be added to the concept node that missed the relation property.
                                 if a_difference in property_dict[h_label]:
                                     for another_concept in root.childNodes:
                                         if another_concept.nodeName == 'skos:ConceptScheme':
@@ -299,11 +299,11 @@ for concept in root.childNodes:
                                 a_concept.appendChild(extra_node)
                                 extra_node.setAttribute('rdf:resource', concept_id)
                                 change_file(n_dom, transformed_file)
-                                
-# Each difference is written to a csv file            
+
+# Each difference is written to a csv file
 header_list = ['concept 1', 'type of relation', 'concept 2']
 d_file  = open(issue_file, "wb")
-writer = csv.writer(d_file) 
+writer = csv.writer(d_file)
 writer.writerow(header_list)
 for d in full_list_of_differnces:
     writer.writerow(d)
@@ -311,12 +311,9 @@ d_file.close()
 
 #Each typeless concept is written to a csv file
 b_file  = open(missing_file, "wb")
-the_writer = csv.writer(b_file) 
+the_writer = csv.writer(b_file)
 for missing in typeless_concepts:
     the_writer.writerow(missing)
-b_file.close()              
+b_file.close()
 
 print datetime.now() - startTime
-
-                 
- 
