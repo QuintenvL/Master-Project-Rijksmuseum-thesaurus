@@ -20,13 +20,13 @@ from sets import Set
 
 
 def main():
+    startTime = datetime.now()
     os.chdir('data')
     source_file = 'rma-skos-thesaurus.rdf'
     transformed_file = '../out/full_transformed.rdf'
     issue_file = '../out/full_differences.csv'
     missing_file = '../out/full_missing.csv'
 
-    startTime = datetime.now()
     print('{} started analysis'.format(datetime.now() - startTime))
     dom = parse(source_file)
     print('{} parsed {}'.format(datetime.now() - startTime, source_file))
@@ -39,12 +39,74 @@ def main():
     inverse_hierarchy = create_inverse_hierarchy(dom)
     print('{} extracted {} concepts with relations to other concepts'
     .format(datetime.now() - startTime, len(inverse_hierarchy)))
-    #dom = add_concept_schemes(dom)
-    #print('{} added {} concept schemes'.format(datetime.now() - startTime, len(scheme_values)))
+    schemeless_concepts = list_schemeless_concepts(dom)
+    print('{} {} concepts without a concept scheme'
+    .format(datetime.now() - startTime, len(schemeless_concepts)))
+    dom = add_concept_schemes(dom, concept_schemes)
+    print('{} added {} concept schemes to dom'
+    .format(datetime.now() - startTime, len(concept_schemes)))
+    write_dom_to_file(dom, transformed_file)
+    print('{} wrote dom to file {}'
+    .format(datetime.now() - startTime, transformed_file))
     #dom = create_valid_hierarchy(dom)
     #process_results(dom)
     #print('{} saved dom to file {}'.format(datetime.now() - startTime, transformed_file))
 
+
+def list_schemeless_concepts(dom):
+    schemeless_concepts = []
+    root = dom.childNodes.item(0)
+
+    for concept in root.childNodes:
+        if concept.nodeName == 'skos:ConceptScheme':
+            continue
+        if concept.nodeType == concept.ELEMENT_NODE:
+            concept_id = concept.attributes.items()[0][1]
+            concept_properties = concept.childNodes
+            property_names = []
+
+            for property in concept_properties:
+                property_names.append(property.nodeName)
+            if 'skos:inScheme' not in property_names:
+                schemeless_concepts.append(concept_id)
+    return schemeless_concepts
+
+
+# def create_valid_hierarchy(dom):
+#     root = dom.childNodes.item(0)
+#
+#     for concept in root.childNodes:
+#         # Ignore concept schemes just added to dom
+#         if concept.nodeName == 'skos:ConceptScheme':
+#             continue
+#         if concept.nodeType == concept.ELEMENT_NODE:
+#             concept_id = concept.attributes.items()[0][1]
+#             concept_properties = concept.childNodes
+#             property_dict = {}
+#
+#             # Each property of a concept is stored in a dictionary with the name of the property and its value
+#             for property in concept_properties:
+#                 if property.nodeType == property.ELEMENT_NODE:
+#                     # Properties with text nodes or other nodes and the skos:topConceptOf nodes are excluded from the property dictionary
+#                     if (property.hasChildNodes()
+#                     or property.nodeName == 'skos:topConceptOf'):
+#                         continue
+#                     else:
+#                         label = property.nodeName
+#                         attr_value = property.attributes.items()[0][1]
+#                         if label in property_dict:
+#                             property_dict[label].append(attr_value)
+#                         else:
+#                             property_dict[label] = [attr_value]
+#                         # All concepts without the skos:inScheme property are added to the list of schemeless concepts
+#                         if 'skos:inScheme' not in property_dict:
+#                             typeless_concepts.append(concept_id)
+#             #         # With the use of a list of relation property labels, the script runs over every relation
+#     return dom
+
+
+# full_list_of_differences = []
+# typeless_concepts = []
 
 def list_concepts(dom):
     concept_identifiers = []
@@ -105,92 +167,37 @@ def inverse_property(property_name):
     else:
         return 'skos:related'
 
-# hierarchy_dict = {}
-# full_list_of_differences = []
-# typeless_concepts = []
-#
-#
-# # Start a run over the file to create list and dictionaries
-# def analyze_structure(dom):
-#     o_rdf = dom.childNodes.item(0)
-#
-#     # Firstly a list is created with the id's of the concepts
-#     for o_concept in o_rdf.childNodes:
-#         if o_concept.nodeType == o_concept.ELEMENT_NODE:
-#             o_concept_id = o_concept.attributes.items()[0][1]
-#             full_list_of_concepts.append(o_concept_id)
-#             # Secondly a run over all properties of a concept is done
-#             analyze_properties_concept(o_concept, o_concept_id)
-#
-# def analyze_properties_concept(o_concept, o_concept_id):
-#     for o_property in o_concept.childNodes:
-#         if o_property.nodeType == o_property.ELEMENT_NODE:
-#             # A list of schemes is created
-#             if o_property.nodeName == 'skos:inScheme':
-#                 property_attr = o_property.attributes.items()[0][1]
-#                 scheme_values.add(property_attr)
-#             # For each type of relation, the inverse relation will be added to a dictionary
-#             if o_property.nodeName == 'skos:broader' or o_property.nodeName == 'skos:narrower' or o_property.nodeName == 'skos:related':
-#                 prop_name = o_property.nodeName
-#                 if prop_name == 'skos:broader':
-#                     prop_name = 'skos:narrower'
-#                 elif prop_name == 'skos:narrower':
-#                     prop_name = 'skos:broader'
-#                 else:
-#                     prop_name = 'skos:related'
-#                 prop_attr = o_property.attributes.items()[0][1]
-#                 if prop_attr not in hierarchy_dict:
-#                     hierarchy_dict[prop_attr] = {}
-#                     hierarchy_dict[prop_attr][prop_name] = [o_concept_id]
-#                 elif prop_name not in hierarchy_dict[prop_attr]:
-#                     hierarchy_dict[prop_attr][prop_name] = [o_concept_id]
-#                 else:
-#                     hierarchy_dict[prop_attr][prop_name].append(o_concept_id)
-#
-# def add_concept_schemes(dom):
-#     # The root of the RDF file is found and selected
-#     root = dom.childNodes.item(0)
-#     # Add missing skos:ConceptScheme nodes to the root for each scheme value
-#     for scheme in scheme_values:
-#         scheme_node = dom.createElement('skos:ConceptScheme')
-#         root.appendChild(scheme_node)
-#         scheme_node.setAttribute('rdf:about', scheme)
-#         concept_node = dom.createElement('dct:title')
-#         scheme_node.appendChild(concept_node)
-#         concept_node.setAttribute('xml:lang', 'nl')
-#         if scheme == 'http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN':
-#             text_node = dom.createTextNode('Scheme Unknown')
-#         else:
-#             text_node = dom.createTextNode(scheme[42:])
-#         concept_node.appendChild(text_node)
-#     return dom
-#
-# def create_valid_hierarchy(dom):
-#     root = dom.childNodes.item(0)
-#
-#     # The next part runs over all concepts in the root
-#     for concept in root.childNodes:
-#         # Ignore concept schemes just added to dom
-#         if concept.nodeName == 'skos:ConceptScheme':
-#             continue
-#         if concept.nodeType == concept.ELEMENT_NODE:
-#             concept_id = concept.attributes.items()[0][1]
-#             concept_properties = concept.childNodes
-#             # Each property of a concept is stored in a dictionary with the name of the property and its value
-#             property_dict = {}
-#     #TODO: add rest of code blocks
-#     return dom
-#
+
+def add_concept_schemes(dom, concept_schemes):
+    # Add missing skos:ConceptScheme nodes to the root
+    root = dom.childNodes.item(0)
+
+    for scheme in concept_schemes:
+        scheme_node = dom.createElement('skos:ConceptScheme')
+        root.appendChild(scheme_node)
+        scheme_node.setAttribute('rdf:about', scheme)
+        concept_node = dom.createElement('dct:title')
+        scheme_node.appendChild(concept_node)
+        concept_node.setAttribute('xml:lang', 'nl')
+        if scheme == 'http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN':
+            text_node = dom.createTextNode('Scheme Unknown')
+        else:
+            text_node = dom.createTextNode(scheme[42:])
+        concept_node.appendChild(text_node)
+    return dom
+
+
+def write_dom_to_file(dom, file):
+    # Write a dom to a XML file
+    xml_file = open(file, "w")
+    xml_file.write(dom.toprettyxml().encode("utf-8"))
+    xml_file.close()
+
 # def process_results(dom):
 #     write_dom_to_file(dom, transformed_file)
 #     save_differences()
 #     save_typeless()
 #
-# # Definition that writes a dom to a XML file
-# def write_dom_to_file(dom, file):
-#     xml_file = open(file, "w")
-#     xml_file.write(dom.toprettyxml().encode("utf-8"))
-#     xml_file.close()
 #
 # # Each difference is written to a csv file
 # def save_differences():
