@@ -1,9 +1,16 @@
-'''
-Created on 13 mrt. 2018
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Reconstruct SKOS
 
-@author: Quinten van Langen
-'''
-# Import all necessary packages
+Script which analyses and reconstructs a SKOS hierarchy.
+"""
+
+__author__ = "Quinten van Langen"
+__version__ = "0.2.0"
+__license__ = "cc0-1.0"
+
+
 import os
 import csv
 from xml.dom.minidom import parse
@@ -11,17 +18,18 @@ from shutil import copyfile
 from datetime import datetime
 from sets import Set
 
+
 # Save the start time, to calculate the full run time of the script
 startTime = datetime.now()
 
 # The name specifications of the used and created files
 source_file = 'rma-skos-thesaurus.rdf'
-transformed_file = 'full_transformed.rdf'
-issue_file = 'full_differences.csv'
-missing_file = 'full_missing.csv'
+transformed_file = '../out/full_transformed.rdf'
+issue_file = '../out/full_differences.csv'
+missing_file = '../out/full_missing.csv'
 
 # The location to store and access the files
-os.chdir('thesaurus')
+os.chdir('data')
 
 scheme_values = Set(['http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN'])
 hierarchy_dict = {}
@@ -29,7 +37,7 @@ full_list_of_concepts = []
 full_list_of_differences = []
 typeless_concepts = []
 
-def analyze_and_transform():
+def main():
     print('{} started analysis'.format(datetime.now() - startTime))
     dom = parse(source_file)
     print('{} parsed {}'.format(datetime.now() - startTime, source_file))
@@ -141,8 +149,6 @@ def save_typeless():
     for missing in typeless_concepts:
         the_writer.writerow([missing])
     b_file.close()
-
-analyze_and_transform()
 
 # The next part runs over all concepts in the root
 # for concept in root.childNodes:
@@ -349,3 +355,6 @@ analyze_and_transform()
             #                     a_concept.appendChild(extra_node)
             #                     extra_node.setAttribute('rdf:resource', concept_id)
             #                     change_file(dom, transformed_file)
+
+if __name__ == "__main__":
+    main()

@@ -1,13 +1,13 @@
 # Rijksmuseum thesaurus project
 
-In this Github folder the Python scripts, SPARQL queries and other pieces of code used in the Master Project about the thesaurus of the Rijksmuseum done by Quinten van Langen, Master student Information Sciences at the VU Amsterdam, is stored.
+In this Github folder the Python scripts, SPARQL queries and other pieces of code used in the Master Project about the thesaurus of the Rijksmuseum done by Quinten van Langen, Master student Information Sciences at the VU Amsterdam, are stored.
 
-## Adlib to Poolparty
-The AdlibToSkos.py file contains the Adlib to Poolparty Python script that is used to transform the SKOS output of the Adlib thesaurus of the Rijksmuseum to the correct SKOS structure that can be imported into the PoolParty system.
+## Reconstruct SKOS
+The reconstruct_skos.py file contains the Adlib to Poolparty Python script that is used to transform the SKOS output of the Adlib thesaurus of the Rijksmuseum to the correct SKOS structure that can be imported into the PoolParty system.
 
 To run the script:
 ```
-python AdlibToSkos.py
+python thesaurus/reconstruct_skos.py
 ```
 
 ## Parsing the AAT
