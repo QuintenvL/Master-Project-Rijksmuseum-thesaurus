@@ -10,6 +10,11 @@ To run the script:
 python thesaurus/reconstruct_skos.py
 ```
 
+To run tests:
+```
+python -m unittest tests.test_reconstruct_skos
+```
+
 ## Parsing the AAT
 The Parsing AAT.py file parses the Getty AAT. The current version of the code is specified to the materials found in the AAT.
 
