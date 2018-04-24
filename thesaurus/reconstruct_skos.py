@@ -36,12 +36,13 @@ def main():
     concept_schemes = list_concept_schemes(dom)
     print('{} identified {} concept schemes'
     .format(datetime.now() - startTime, len(concept_schemes)))
-    inverse_hierarchy = create_inverse_hierarchy(dom)
-    print('{} extracted {} concepts with relations to other concepts'
-    .format(datetime.now() - startTime, len(inverse_hierarchy)))
+    concept_schemes.add('http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN')
     schemeless_concepts = list_schemeless_concepts(dom)
     print('{} {} concepts without a concept scheme'
     .format(datetime.now() - startTime, len(schemeless_concepts)))
+    inverse_hierarchy = create_inverse_hierarchy(dom)
+    print('{} extracted {} concepts with relations to other concepts'
+    .format(datetime.now() - startTime, len(inverse_hierarchy)))
     differences = list_hierarchical_differences(inverse_hierarchy, dom)
     print('{} found {} hierarchical differences'
     .format(datetime.now() - startTime, len(differences)))
@@ -124,8 +125,8 @@ def list_concepts(dom):
 
 
 def list_concept_schemes(dom):
-    unknown_scheme = 'http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN'
-    concept_schemes = Set([unknown_scheme])
+    # List all concept schemes referenced in the thesaurus
+    concept_schemes = Set([])
     o_rdf = dom.childNodes.item(0)
 
     for o_concept in o_rdf.childNodes:

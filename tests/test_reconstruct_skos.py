@@ -37,6 +37,9 @@ class TestThesaurusAnalysis(unittest.TestCase):
         )
         node1 = self.dom.createElement('skos:Concept')
         node1.setAttribute('rdf:about', 'http://concept.net/1')
+        scheme1 = self.dom.createElement('skos:inScheme')
+        scheme1.setAttribute('rdf:resource', 'http://concept_scheme.net/1')
+        node1.appendChild(scheme1)
         top_element.appendChild(node1)
         node2 = self.dom.createElement('skos:Concept')
         node2.setAttribute('rdf:about', 'http://concept.net/2')
@@ -47,10 +50,20 @@ class TestThesaurusAnalysis(unittest.TestCase):
 
 
     def test_list_concepts(self):
-        """ make sure only skos concepts are listed """
+        """ list concepts and make sure only skos concepts are listed """
         concepts = reconstruct_skos.list_concepts(self.dom)
         test_concepts = ['http://concept.net/1', 'http://concept.net/2']
         self.assertEqual(concepts, test_concepts)
+
+    def test_list_concept_schemes(self):
+        """ test if all used concept schemes are listed """
+        concept_schemes = reconstruct_skos.list_concept_schemes(self.dom)
+        self.assertEquals(len(concept_schemes), 1)
+
+    def test_list_schemeless_concepts(self):
+        """ test if all concepts without a scheme are listed """
+        schemeless = reconstruct_skos.list_schemeless_concepts(self.dom)
+        self.assertEquals(schemeless, ['http://concept.net/2'])
 
 
 if __name__ == '__main__':
