@@ -35,15 +35,31 @@ class TestThesaurusAnalysis(unittest.TestCase):
             "xmlns:dct",
             "http://purl.org/dc/terms/"
         )
+        # Add first concept
         node1 = self.dom.createElement('skos:Concept')
         node1.setAttribute('rdf:about', 'http://concept.net/1')
         scheme1 = self.dom.createElement('skos:inScheme')
         scheme1.setAttribute('rdf:resource', 'http://concept_scheme.net/1')
         node1.appendChild(scheme1)
+        narrower1 = self.dom.createElement('skos:narrower')
+        narrower1.setAttribute('rdf:resource', 'http://concept.net/2')
+        node1.appendChild(narrower1)
         top_element.appendChild(node1)
+        # Add second concept
         node2 = self.dom.createElement('skos:Concept')
         node2.setAttribute('rdf:about', 'http://concept.net/2')
+        broader1 = self.dom.createElement('skos:broader')
+        broader1.setAttribute('rdf:resource', 'http://concept.net/3')
+        node2.appendChild(broader1)
         top_element.appendChild(node2)
+        # Add third concept
+        node3 = self.dom.createElement('skos:Concept')
+        node3.setAttribute('rdf:about', 'http://concept.net/3')
+        related1 = self.dom.createElement('skos:related')
+        related1.setAttribute('rdf:resource', 'http://concept.net/1')
+        node3.appendChild(related1)
+        top_element.appendChild(node3)
+        # Add first concept scheme
         node3 = self.dom.createElement('skos:ConceptScheme')
         node3.setAttribute('rdf:about', 'http://concept_scheme.net/1')
         top_element.appendChild(node3)
@@ -52,7 +68,11 @@ class TestThesaurusAnalysis(unittest.TestCase):
     def test_list_concepts(self):
         """ list concepts and make sure only skos concepts are listed """
         concepts = reconstruct_skos.list_concepts(self.dom)
-        test_concepts = ['http://concept.net/1', 'http://concept.net/2']
+        test_concepts = [
+            'http://concept.net/1',
+            'http://concept.net/2',
+            'http://concept.net/3'
+        ]
         self.assertEqual(concepts, test_concepts)
 
     def test_list_concept_schemes(self):
@@ -63,7 +83,16 @@ class TestThesaurusAnalysis(unittest.TestCase):
     def test_list_schemeless_concepts(self):
         """ test if all concepts without a scheme are listed """
         schemeless = reconstruct_skos.list_schemeless_concepts(self.dom)
-        self.assertEquals(schemeless, ['http://concept.net/2'])
+        test_schemeless = [
+            'http://concept.net/2',
+            'http://concept.net/3'
+        ]
+        self.assertEquals(schemeless, test_schemeless)
+
+    def test_inverse_hierarchy(self):
+        """ test if an inverted hierarchy is created """
+        inverse_hierarchy = reconstruct_skos.create_inverse_hierarchy(self.dom)
+        self.assertEquals(len(inverse_hierarchy), 3)
 
 
 if __name__ == '__main__':

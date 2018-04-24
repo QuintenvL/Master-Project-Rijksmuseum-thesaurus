@@ -139,6 +139,8 @@ def list_concept_schemes(dom):
 
 
 def create_inverse_hierarchy(dom):
+    # The inverse of every hierarchical skos relation is added to a dictionary:
+    # {'http://concept.net/2': {'skos:broader': ['http://concept.net/1']}}
     hierarchy_dict = {}
     o_rdf = dom.childNodes.item(0)
 
@@ -150,16 +152,16 @@ def create_inverse_hierarchy(dom):
             or o_property.nodeName == 'skos:related')):
                 o_concept_id = o_concept.attributes.items()[0][1]
                 prop_name = o_property.nodeName
-                prop_inverse = inverse_property(prop_name)
+                prop_inv = inverse_property(prop_name)
                 prop_attr = o_property.attributes.items()[0][1]
 
                 if prop_attr not in hierarchy_dict:
                     hierarchy_dict[prop_attr] = {}
-                    hierarchy_dict[prop_attr][prop_name] = [o_concept_id]
-                elif prop_name not in hierarchy_dict[prop_attr]:
-                    hierarchy_dict[prop_attr][prop_name] = [o_concept_id]
+                    hierarchy_dict[prop_attr][prop_inv] = [o_concept_id]
+                elif prop_inv not in hierarchy_dict[prop_attr]:
+                    hierarchy_dict[prop_attr][prop_inv] = [o_concept_id]
                 else:
-                    hierarchy_dict[prop_attr][prop_name].append(o_concept_id)
+                    hierarchy_dict[prop_attr][prop_inv].append(o_concept_id)
     return hierarchy_dict
 
 
