@@ -95,16 +95,23 @@ class TestThesaurusAnalysis(unittest.TestCase):
         inverse_hierarchy = analyse.create_inverse_hierarchy(self.dom)
         self.assertEquals(len(inverse_hierarchy), 3)
 
-    # def test_differences_hierarchy(self):
-    #     """ test if hierarchical differences are found """
-    #     hierarchy = reconstruct_skos.create_inverse_hierarchy(self.dom)
-    #     differences = reconstruct_skos.list_hierarchical_differences(
-    #         hierarchy,
-    #         self.dom
-    #     )
-    #     print(hierarchy)
-    #     print(differences)
-    #     # self.assertEquals(len(inverse_hierarchy), 3)
+    def test_property_dict(self):
+        """ Test if hierarchical properties are extracted. """
+        node = self.dom.childNodes.item(0).childNodes.item(0)
+        property_dict = analyse.hierarchical_property_dict(node)
+        test_dict = {'skos:narrower': ['http://concept.net/2']}
+        self.assertEquals(property_dict, test_dict)
+
+    def test_differences_hierarchy(self):
+        """ test if hierarchical differences are found """
+        inconsistencies = analyse.hierarchical_inconsistencies(self.dom)
+        # differences = reconstruct_skos.list_hierarchical_differences(
+        #     hierarchy,
+        #     self.dom
+        # )
+        # print(hierarchy)
+        # print(differences)
+        # self.assertEquals(len(inverse_hierarchy), 3)
 
 
 if __name__ == '__main__':

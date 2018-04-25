@@ -41,12 +41,9 @@ def main():
     schemeless_concepts = list_schemeless_concepts(dom)
     print('{} {} concepts without a concept scheme'
     .format(time(start), len(schemeless_concepts)))
-    inverse_hierarchy = create_inverse_hierarchy(dom)
-    print('{} extracted inverse hierarchy of {}'
-    .format(time(start), len(inverse_hierarchy)))
-    # differences = list_hierarchical_differences(inverse_hierarchy, dom)
-    # print('{} found {} hierarchical differences'
-    # .format(datetime.now() - startTime, len(differences)))
+    differences = hierarchical_inconsistencies(dom)
+    print('{} found {} hierarchical inconsistencies'
+    .format(time(start), len(differences)))
     # dom = add_concept_schemes(dom, concept_schemes)
     # print('{} added {} concept schemes to dom'
     # .format(datetime.now() - startTime, len(concept_schemes)))
@@ -120,61 +117,6 @@ def time(start):
 
 
 
-def list_hierarchical_differences(inverse_hierarchy, dom):
-    root = dom.childNodes.item(0)
-    list_of_differences = []
-
-    # Iterate through all concepts listing hierarchical differences
-    for concept in root.childNodes:
-        if concept.nodeName == 'skos:ConceptScheme':
-            continue
-        if concept.nodeType == concept.ELEMENT_NODE:
-            concept_id = concept.attributes.items()[0][1]
-            properties = create_property_dict(concept.childNodes)
-
-            # 1. Verify based upon the inverse hierarchy whether the
-            # concept has all hierarchical properties it should have.
-            if concept_id in inverse_hierarchy:
-                h_properties = inverse_hierarchy[concept_id]
-                diff = missing_properties(properties, h_properties)
-    return list_of_differences
-
-def missing_properties(properties, h_properties):
-    hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
-
-    for h_label in hierarchy_labels:
-        if h_label in properties and h_label in h_properties:
-            difference = list(
-                set(property_dict[h_label])
-                - set(inverse_hierarchy[concept_id][h_label])
-            )
-            if difference != []:
-                difference_list = [
-                    concept_id, h_label, difference
-                ]
-    return difference_list
-
-def create_property_dict(concept_properties):
-    # Each property is stored in a dictionary with the name of the
-    # property and its value.
-    property_dict = {}
-
-    for property in concept_properties:
-        if property.nodeType == property.ELEMENT_NODE:
-            # Properties with text nodes or other nodes and the
-            # skos:topConceptOf nodes are excluded from the property
-            # dictionary.
-            if (property.hasChildNodes()
-            or property.nodeName == 'skos:topConceptOf'):
-                continue
-            else:
-                label = property.nodeName
-                attribute_value = property.attributes.items()[0][1]
-                if label in property_dict:
-                    property_dict[label].append(attribute_value)
-                else:
-                    property_dict[label] = [attribute_value]
-    return property_dict
 
 
 def add_concept_schemes(dom, concept_schemes):

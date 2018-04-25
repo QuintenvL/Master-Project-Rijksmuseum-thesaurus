@@ -15,6 +15,7 @@ from sets import Set
 #import matplotlib.pyplot as plt
 #from matplotlib.pyplot import show
 
+
 def list_concepts(dom):
     # Create a list with the id's of the SKOS concepts
     concept_identifiers = []
@@ -95,6 +96,64 @@ def inverse_property(property_name):
         return 'skos:broader'
     else:
         return 'skos:related'
+
+
+def hierarchical_inconsistencies(dom):
+    root = dom.childNodes.item(0)
+    list_of_differences = []
+    inverse_hierarchy = create_inverse_hierarchy(dom)
+
+    # Iterate through all concepts, recording hierarchical inconsistencies
+    for node in root.childNodes:
+        if (node.nodeType == node.ELEMENT_NODE
+        and node.nodeName == 'skos:Concept'):
+            concept_id = node.attributes.items()[0][1]
+            properties = hierarchical_property_dict(node)
+            # 1. Verify based upon the inverse hierarchy whether the
+            # concept has all hierarchical properties it should have.
+            # if concept_id in inverse_hierarchy:
+            #     h_properties = inverse_hierarchy[concept_id]
+            #     diff = missing_properties(properties, h_properties)
+    return list_of_differences
+
+
+def hierarchical_property_dict(node):
+    # Each hierarchical property is stored in a dictionary with the name of the
+    # property and its value.
+    hierarchical_properties = {}
+    hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
+
+    for property in node.childNodes:
+        if (property.nodeType == property.ELEMENT_NODE
+        and property.nodeName in hierarchy_labels):
+            prop_name = property.nodeName
+            object_id = property.attributes.items()[0][1]
+
+            if prop_name in hierarchical_properties:
+                hierarchical_properties[prop_name].append(object_id)
+            else:
+                hierarchical_properties[prop_name] = [object_id]
+    return hierarchical_properties
+
+
+def missing_properties(properties, h_properties):
+    hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
+
+    for h_label in hierarchy_labels:
+        if h_label in properties and h_label in h_properties:
+            difference = list(
+                set(property_dict[h_label])
+                - set(inverse_hierarchy[concept_id][h_label])
+            )
+            if difference != []:
+                difference_list = [
+                    concept_id, h_label, difference
+                ]
+    return difference_list
+
+
+
+
 
 # def create_concept_list(root):
 #
