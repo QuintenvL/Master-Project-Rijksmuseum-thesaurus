@@ -98,26 +98,45 @@ def inverse_property(property_name):
         return 'skos:related'
 
 
-def hierarchical_inconsistencies(dom):
-    root = dom.childNodes.item(0)
-    list_of_differences = []
+def missing_outward_references(dom):
     inverse_hierarchy = create_inverse_hierarchy(dom)
+    missing_references = []
 
-    # Iterate through all concepts, recording hierarchical inconsistencies
+    # Iterate through all concepts in inverse_hierarchy to check whether
+    # all deduced references are present for the concept in question
+    for concept_id in inverse_hierarchy:
+        concept = get_concept(dom, concept_id)
+        properties = hierarchical_properties_dict(concept)
+        i_properties = inverse_hierarchy[concept_id]
+        missing = outward_difference(concept_id, properties, i_properties)
+        if missing != []:
+            missing_references.append(missing)
+    return missing_references
+
+
+def outward_difference(concept_id, props, i_props):
+    missing_references = []
+
+    for h_label in i_props:
+        if h_label in i_props and h_label in props:
+            diff = list(set(i_props[h_label]) - set(props[h_label]))
+        else:
+            diff = i_props[h_label]
+        if diff != []:
+            missing = [concept_id, h_label, diff]
+            missing_references.append(missing)
+    return missing_references
+
+
+def get_concept(dom, concept_id):
+    root = dom.childNodes.item(0)
+
     for node in root.childNodes:
-        if (node.nodeType == node.ELEMENT_NODE
-        and node.nodeName == 'skos:Concept'):
-            concept_id = node.attributes.items()[0][1]
-            properties = hierarchical_property_dict(node)
-            # 1. Verify based upon the inverse hierarchy whether the
-            # concept has all hierarchical properties it should have.
-            # if concept_id in inverse_hierarchy:
-            #     h_properties = inverse_hierarchy[concept_id]
-            #     diff = missing_properties(properties, h_properties)
-    return list_of_differences
+        if concept_id == node.attributes.items()[0][1]:
+            return node
 
 
-def hierarchical_property_dict(node):
+def hierarchical_properties_dict(node):
     # Each hierarchical property is stored in a dictionary with the name of the
     # property and its value.
     hierarchical_properties = {}
@@ -134,25 +153,6 @@ def hierarchical_property_dict(node):
             else:
                 hierarchical_properties[prop_name] = [object_id]
     return hierarchical_properties
-
-
-def missing_properties(properties, h_properties):
-    hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
-
-    for h_label in hierarchy_labels:
-        if h_label in properties and h_label in h_properties:
-            difference = list(
-                set(property_dict[h_label])
-                - set(inverse_hierarchy[concept_id][h_label])
-            )
-            if difference != []:
-                difference_list = [
-                    concept_id, h_label, difference
-                ]
-    return difference_list
-
-
-
 
 
 # def create_concept_list(root):

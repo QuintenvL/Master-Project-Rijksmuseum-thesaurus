@@ -98,20 +98,37 @@ class TestThesaurusAnalysis(unittest.TestCase):
     def test_property_dict(self):
         """ Test if hierarchical properties are extracted. """
         node = self.dom.childNodes.item(0).childNodes.item(0)
-        property_dict = analyse.hierarchical_property_dict(node)
+        property_dict = analyse.hierarchical_properties_dict(node)
         test_dict = {'skos:narrower': ['http://concept.net/2']}
         self.assertEquals(property_dict, test_dict)
 
+    def test_missing_concepts(self):
+        """ Test if outward difference is returned. """
+        concept1 = 'http://concept.net/1'
+        props1 = {'skos:broader': ['http://concept.net/3']}
+        i_props1 = {'skos:broader': [
+            'http://concept.net/2',
+            'http://concept.net/5'
+        ]}
+        props2 = {
+            'skos:broader': ['http://concept.net/3'],
+            'skos:narrower': ['http://concept.net/4']
+        }
+        i_props2 = {
+            'skos:broader': ['http://concept.net/2'],
+            'skos:narrower': ['http://concept.net/5']
+        }
+        missing1 = analyse.outward_difference(concept1, props1, i_props1)
+
+        self.assertEquals(len(missing1), 1)
+        missing2 = analyse.outward_difference(concept1, props2, i_props2)
+        self.assertEquals(len(missing2), 2)
+
     def test_differences_hierarchy(self):
-        """ test if hierarchical differences are found """
-        inconsistencies = analyse.hierarchical_inconsistencies(self.dom)
-        # differences = reconstruct_skos.list_hierarchical_differences(
-        #     hierarchy,
-        #     self.dom
-        # )
-        # print(hierarchy)
-        # print(differences)
-        # self.assertEquals(len(inverse_hierarchy), 3)
+        """ Test if hierarchical differences are found. """
+        outward = analyse.missing_outward_references(self.dom)
+
+        self.assertEquals(len(outward), 3)
 
 
 if __name__ == '__main__':
