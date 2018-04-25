@@ -89,12 +89,12 @@ class TestThesaurusAnalysis(unittest.TestCase):
             'http://concept.net/3'
         ]
         self.assertEquals(schemeless, test_schemeless)
-    #
-    # def test_inverse_hierarchy(self):
-    #     """ test if an inverted hierarchy is created """
-    #     inverse_hierarchy = reconstruct_skos.create_inverse_hierarchy(self.dom)
-    #     self.assertEquals(len(inverse_hierarchy), 3)
-    #
+
+    def test_inverse_hierarchy(self):
+        """ Test if an inverted hierarchy is properly created. """
+        inverse_hierarchy = analyse.create_inverse_hierarchy(self.dom)
+        self.assertEquals(len(inverse_hierarchy), 3)
+
     # def test_differences_hierarchy(self):
     #     """ test if hierarchical differences are found """
     #     hierarchy = reconstruct_skos.create_inverse_hierarchy(self.dom)

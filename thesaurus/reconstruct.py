@@ -41,9 +41,9 @@ def main():
     schemeless_concepts = list_schemeless_concepts(dom)
     print('{} {} concepts without a concept scheme'
     .format(time(start), len(schemeless_concepts)))
-    # inverse_hierarchy = create_inverse_hierarchy(dom)
-    # print('{} extracted {} concepts with relations to other concepts'
-    # .format(datetime.now() - startTime, len(inverse_hierarchy)))
+    inverse_hierarchy = create_inverse_hierarchy(dom)
+    print('{} extracted inverse hierarchy of {}'
+    .format(time(start), len(inverse_hierarchy)))
     # differences = list_hierarchical_differences(inverse_hierarchy, dom)
     # print('{} found {} hierarchical differences'
     # .format(datetime.now() - startTime, len(differences)))
@@ -118,40 +118,6 @@ def time(start):
 
 
 
-def create_inverse_hierarchy(dom):
-    # The inverse of every hierarchical skos relation is added to a dictionary:
-    # {'http://concept.net/2': {'skos:broader': ['http://concept.net/1']}}
-    hierarchy_dict = {}
-    o_rdf = dom.childNodes.item(0)
-
-    for o_concept in o_rdf.childNodes:
-        for o_property in o_concept.childNodes:
-            if (o_property.nodeType == o_property.ELEMENT_NODE
-            and (o_property.nodeName == 'skos:broader'
-            or o_property.nodeName == 'skos:narrower'
-            or o_property.nodeName == 'skos:related')):
-                o_concept_id = o_concept.attributes.items()[0][1]
-                prop_name = o_property.nodeName
-                prop_inv = inverse_property(prop_name)
-                prop_attr = o_property.attributes.items()[0][1]
-
-                if prop_attr not in hierarchy_dict:
-                    hierarchy_dict[prop_attr] = {}
-                    hierarchy_dict[prop_attr][prop_inv] = [o_concept_id]
-                elif prop_inv not in hierarchy_dict[prop_attr]:
-                    hierarchy_dict[prop_attr][prop_inv] = [o_concept_id]
-                else:
-                    hierarchy_dict[prop_attr][prop_inv].append(o_concept_id)
-    return hierarchy_dict
-
-
-def inverse_property(property_name):
-    if property_name == 'skos:broader':
-        return 'skos:narrower'
-    elif property_name == 'skos:narrower':
-        return 'skos:broader'
-    else:
-        return 'skos:related'
 
 
 def list_hierarchical_differences(inverse_hierarchy, dom):

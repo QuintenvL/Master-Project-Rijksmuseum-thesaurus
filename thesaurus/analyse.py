@@ -62,9 +62,39 @@ def list_schemeless_concepts(dom):
     return schemeless_concepts
 
 
+def create_inverse_hierarchy(dom):
+    # The inverse of every hierarchical skos relation is added to a dictionary:
+    # {'http://concept.net/2': {'skos:broader': ['http://concept.net/1']}}
+    hierarchy_dict = {}
+    hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
+    root = dom.childNodes.item(0)
+
+    for node in root.childNodes:
+        for property in node.childNodes:
+            if (property.nodeType == property.ELEMENT_NODE
+            and (property.nodeName in hierarchy_labels)):
+                concept_id = node.attributes.items()[0][1]
+                prop_name = property.nodeName
+                prop_inv = inverse_property(prop_name)
+                object_id = property.attributes.items()[0][1]
+
+                if object_id not in hierarchy_dict:
+                    hierarchy_dict[object_id] = {}
+                    hierarchy_dict[object_id][prop_inv] = [concept_id]
+                elif prop_inv not in hierarchy_dict[object_id]:
+                    hierarchy_dict[object_id][prop_inv] = [concept_id]
+                else:
+                    hierarchy_dict[object_id][prop_inv].append(concept_id)
+    return hierarchy_dict
 
 
-
+def inverse_property(property_name):
+    if property_name == 'skos:broader':
+        return 'skos:narrower'
+    elif property_name == 'skos:narrower':
+        return 'skos:broader'
+    else:
+        return 'skos:related'
 
 # def create_concept_list(root):
 #
