@@ -13,10 +13,10 @@ from datetime import datetime
 startTime = datetime.now()
 
 # The name specifications of the used and created files
-orginial_file = 'full_skos.rdf'
-transformed_file = 'Full_transformed.rdf'
-issue_file = 'full_differences.csv'
-missing_file = 'full_missing.csv'
+orginial_file = 'R_thesaurus_material_20180221.rdf'
+transformed_file = 'Material_transformed.rdf'
+issue_file = 'differences_materials.csv'
+missing_file = 'missing_materials.csv'
 os.chdir('../thesaurus_export') # The location to store and access the files
 
 # Definition that opens a XML file and updates the changes made
@@ -72,6 +72,7 @@ typeless_concepts = []
 n_dom = parse(transformed_file)
 childs = n_dom.childNodes
 root = childs.item(0)
+# xml_file = open(transformed_file, "w")
 # The first change is the addition of skos:ConceptScheme nodes to the root for each scheme value
 for scheme in scheme_values:
     if scheme == 'Unknown':
@@ -136,6 +137,15 @@ for concept in root.childNodes:
                         a_remove_list = []
                         for a_difference in difference:
                             if a_difference in full_list_of_concepts:
+# Remove all relations pointing to the concept itself
+                                if a_difference == concept_id:
+                                    a_remove_list.append(a_difference)
+                                    for w_property in concept.childNodes:
+                                        if w_property.nodeType == w_property.ELEMENT_NODE:
+                                            if w_property.nodeName == h_label and w_property.attributes.items()[0][1] == a_difference:
+                                                concept.removeChild(w_property)
+                                                change_file(n_dom, transformed_file)
+                                    continue
 # If the difference concept is missing the difference, a new property node will be added to the concept node that missed the relation property. 
                                 if a_difference in property_dict[h_label]:
                                     for another_concept in root.childNodes:
@@ -187,6 +197,8 @@ for concept in root.childNodes:
                     difference_list = [concept_id, h_label,hierarchy_dict[concept_id][h_label]]
                     full_list_of_differnces.append(difference_list)
                     for t_dif in hierarchy_dict[concept_id][h_label]:
+                        if t_dif == concept_id:
+                            continue
                         if h_label in property_dict:
                             property_dict[h_label].append(t_dif)
                         else:
@@ -202,6 +214,8 @@ for concept in root.childNodes:
                     q_remove_list = []
                     for r_dif in property_dict[h_label]:
                         if r_dif in full_list_of_concepts:
+                            if r_dif == concept_id:
+                                continue
                             for q_concept in root.childNodes:
                                 if q_concept.nodeName == 'skos:ConceptScheme':
                                     continue
@@ -299,6 +313,8 @@ for concept in root.childNodes:
                                 a_concept.appendChild(extra_node)
                                 extra_node.setAttribute('rdf:resource', concept_id)
                                 change_file(n_dom, transformed_file)
+                                
+# xml_file.close()
                                 
 # Each difference is written to a csv file            
 header_list = ['concept 1', 'type of relation', 'concept 2']
