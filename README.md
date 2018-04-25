@@ -7,12 +7,12 @@ The reconstruct_skos.py file contains the Adlib to Poolparty Python script that 
 
 To run the script:
 ```
-python thesaurus/reconstruct_skos.py
+python thesaurus/reconstruct.py
 ```
 
 To run tests:
 ```
-python -m unittest tests.test_reconstruct_skos
+python -m unittest -v tests.test_thesaurus
 ```
 
 ## Parsing the AAT
@@ -24,3 +24,11 @@ To run the script:
 The AnalyseAdlib.py file analyze the Adlib files on different aspects (relations, labels). All these quantitative analyses are stored in xlsx files (Adlib_full.xlsx and Adlib_materials.xlsx).
 
 To run the script:
+```
+python thesaurus/analyse.py
+```
+
+To run tests:
+```
+python -m unittest -v tests.test_thesaurus.TestThesaurusAnalysis
+```

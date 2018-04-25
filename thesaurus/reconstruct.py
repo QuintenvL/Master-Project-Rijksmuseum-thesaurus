@@ -17,51 +17,54 @@ from xml.dom.minidom import parse
 from shutil import copyfile
 from datetime import datetime
 from sets import Set
+from analyse import list_concepts
 
 
 def main():
-    startTime = datetime.now()
+    start = datetime.now()
     os.chdir('data')
     source_file = 'rma-skos-materials.rdf'
     transformed_file = '../out/full_transformed.rdf'
     issue_file = '../out/full_differences.csv'
     missing_file = '../out/full_missing.csv'
 
-    print('{} started analysis'.format(datetime.now() - startTime))
+    print('{} started analysis'.format(time(start)))
     dom = parse(source_file)
-    print('{} parsed {}'.format(datetime.now() - startTime, source_file))
+    print('{} parsed {}'.format(time(start), source_file))
     concepts = list_concepts(dom)
     print('{} analyzing {} concepts'
-    .format(datetime.now() - startTime, len(concepts)))
-    concept_schemes = list_concept_schemes(dom)
-    print('{} identified {} concept schemes'
-    .format(datetime.now() - startTime, len(concept_schemes)))
-    concept_schemes.add('http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN')
-    schemeless_concepts = list_schemeless_concepts(dom)
-    print('{} {} concepts without a concept scheme'
-    .format(datetime.now() - startTime, len(schemeless_concepts)))
-    inverse_hierarchy = create_inverse_hierarchy(dom)
-    print('{} extracted {} concepts with relations to other concepts'
-    .format(datetime.now() - startTime, len(inverse_hierarchy)))
-    differences = list_hierarchical_differences(inverse_hierarchy, dom)
-    print('{} found {} hierarchical differences'
-    .format(datetime.now() - startTime, len(differences)))
-    dom = add_concept_schemes(dom, concept_schemes)
-    print('{} added {} concept schemes to dom'
-    .format(datetime.now() - startTime, len(concept_schemes)))
-    dom = reconstruct_hierarchy(dom, concepts, differences)
-    print('{} added {} hierarchical differences to dom'
-    .format(datetime.now() - startTime, len(differences)))
-    write_dom_to_file(dom, transformed_file)
-    print('{} wrote dom to file {}'
-    .format(datetime.now() - startTime, transformed_file))
-    save_schemeless(schemeless_concepts, missing_file)
-    print('{} wrote concepts without scheme to file {}'
-    .format(datetime.now() - startTime, missing_file))
-    save_differences(differences, issue_file)
-    print('{} wrote hierarchical differences to file {}'
-    .format(datetime.now() - startTime, issue_file))
+    .format(time(start), len(concepts)))
+    # concept_schemes = list_concept_schemes(dom)
+    # print('{} identified {} concept schemes'
+    # .format(datetime.now() - startTime, len(concept_schemes)))
+    # concept_schemes.add('http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN')
+    # schemeless_concepts = list_schemeless_concepts(dom)
+    # print('{} {} concepts without a concept scheme'
+    # .format(datetime.now() - startTime, len(schemeless_concepts)))
+    # inverse_hierarchy = create_inverse_hierarchy(dom)
+    # print('{} extracted {} concepts with relations to other concepts'
+    # .format(datetime.now() - startTime, len(inverse_hierarchy)))
+    # differences = list_hierarchical_differences(inverse_hierarchy, dom)
+    # print('{} found {} hierarchical differences'
+    # .format(datetime.now() - startTime, len(differences)))
+    # dom = add_concept_schemes(dom, concept_schemes)
+    # print('{} added {} concept schemes to dom'
+    # .format(datetime.now() - startTime, len(concept_schemes)))
+    # dom = reconstruct_hierarchy(dom, concepts, differences)
+    # print('{} added {} hierarchical differences to dom'
+    # .format(datetime.now() - startTime, len(differences)))
+    # write_dom_to_file(dom, transformed_file)
+    # print('{} wrote dom to file {}'
+    # .format(datetime.now() - startTime, transformed_file))
+    # save_schemeless(schemeless_concepts, missing_file)
+    # print('{} wrote concepts without scheme to file {}'
+    # .format(datetime.now() - startTime, missing_file))
+    # save_differences(differences, issue_file)
+    # print('{} wrote hierarchical differences to file {}'
+    # .format(datetime.now() - startTime, issue_file))
 
+def time(start):
+    return datetime.now() - start
 # def reconstruct_hierarchy(dom, concepts, difference_lists):
 #     root = dom.childNodes.item(0)
 #
@@ -111,17 +114,6 @@ def main():
 #     return dom
 
 
-def list_concepts(dom):
-    concept_identifiers = []
-    o_rdf = dom.childNodes.item(0)
-
-    # Create a list with the id's of the concepts
-    for o_concept in o_rdf.childNodes:
-        if (o_concept.nodeType == o_concept.ELEMENT_NODE
-        and o_concept.nodeName == 'skos:Concept'):
-            o_concept_id = o_concept.attributes.items()[0][1]
-            concept_identifiers.append(o_concept_id)
-    return concept_identifiers
 
 
 def list_concept_schemes(dom):
@@ -194,35 +186,38 @@ def list_schemeless_concepts(dom):
 
 
 def list_hierarchical_differences(inverse_hierarchy, dom):
-    childs = dom.childNodes
-    root = childs.item(0)
+    root = dom.childNodes.item(0)
     list_of_differences = []
-    hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
 
+    # Iterate through all concepts listing hierarchical differences
     for concept in root.childNodes:
         if concept.nodeName == 'skos:ConceptScheme':
             continue
         if concept.nodeType == concept.ELEMENT_NODE:
             concept_id = concept.attributes.items()[0][1]
-            property_dict = create_property_dict(concept.childNodes)
+            properties = create_property_dict(concept.childNodes)
 
-            # The difference between the relations in the property
-            # dictionary and in the hierarchical dictionary are found
+            # 1. Verify based upon the inverse hierarchy whether the
+            # concept has all hierarchical properties it should have.
             if concept_id in inverse_hierarchy:
-                for h_label in hierarchy_labels:
-                    if (h_label in property_dict
-                    and h_label in inverse_hierarchy[concept_id]):
-                        difference = list(
-                            set(property_dict[h_label])
-                            - set(inverse_hierarchy[concept_id][h_label])
-                        )
-                        if difference != []:
-                            difference_list = [
-                                concept_id, h_label, difference
-                            ]
-                            list_of_differences.append(difference_list)
+                h_properties = inverse_hierarchy[concept_id]
+                diff = missing_properties(properties, h_properties)
     return list_of_differences
 
+def missing_properties(properties, h_properties):
+    hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
+
+    for h_label in hierarchy_labels:
+        if h_label in properties and h_label in h_properties:
+            difference = list(
+                set(property_dict[h_label])
+                - set(inverse_hierarchy[concept_id][h_label])
+            )
+            if difference != []:
+                difference_list = [
+                    concept_id, h_label, difference
+                ]
+    return difference_list
 
 def create_property_dict(concept_properties):
     # Each property is stored in a dictionary with the name of the
