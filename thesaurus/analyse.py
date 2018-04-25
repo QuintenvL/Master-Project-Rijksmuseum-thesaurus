@@ -106,11 +106,12 @@ def missing_outward_references(dom):
     # all deduced references are present for the concept in question
     for concept_id in inverse_hierarchy:
         concept = get_concept(dom, concept_id)
-        properties = hierarchical_properties_dict(concept)
-        i_properties = inverse_hierarchy[concept_id]
-        missing = outward_difference(concept_id, properties, i_properties)
-        if missing != []:
-            missing_references.append(missing)
+        if concept is not None:
+            properties = hierarchical_properties_dict(concept)
+            i_properties = inverse_hierarchy[concept_id]
+            missing = outward_difference(concept_id, properties, i_properties)
+            if missing != []:
+                missing_references.append(missing)
     return missing_references
 
 
@@ -134,6 +135,32 @@ def get_concept(dom, concept_id):
     for node in root.childNodes:
         if concept_id == node.attributes.items()[0][1]:
             return node
+    return None
+
+
+def undefined_concept_references(dom):
+    missing_references = []
+    concepts = list_concepts(dom)
+    root = dom.childNodes.item(0)
+    hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
+
+    # Iterate through all concepts to check if they include references
+    # to concepts that do not exist
+    for node in root.childNodes:
+        if (node.nodeType == node.ELEMENT_NODE
+        and node.nodeName == 'skos:Concept'):
+            concept_id = node.attributes.items()[0][1]
+
+            for property in node.childNodes:
+                if (property.nodeType == property.ELEMENT_NODE
+                and property.nodeName in hierarchy_labels):
+                    object_id = property.attributes.items()[0][1]
+                    h_label = property.nodeName
+
+                    if object_id not in concepts:
+                        missing = [concept_id, h_label, object_id]
+                        missing_references.append(missing)
+    return missing_references
 
 
 def hierarchical_properties_dict(node):

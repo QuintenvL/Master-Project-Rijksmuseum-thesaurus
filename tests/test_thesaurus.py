@@ -44,6 +44,9 @@ class TestThesaurusAnalysis(unittest.TestCase):
         narrower1 = self.dom.createElement('skos:narrower')
         narrower1.setAttribute('rdf:resource', 'http://concept.net/2')
         node1.appendChild(narrower1)
+        narrower36 = self.dom.createElement('skos:narrower')
+        narrower36.setAttribute('rdf:resource', 'http://concept.net/36')
+        node1.appendChild(narrower36)
         top_element.appendChild(node1)
         # Add second concept
         node2 = self.dom.createElement('skos:Concept')
@@ -58,6 +61,9 @@ class TestThesaurusAnalysis(unittest.TestCase):
         related1 = self.dom.createElement('skos:related')
         related1.setAttribute('rdf:resource', 'http://concept.net/1')
         node3.appendChild(related1)
+        broader36 = self.dom.createElement('skos:broader')
+        broader36.setAttribute('rdf:resource', 'http://concept.net/36')
+        node3.appendChild(broader36)
         top_element.appendChild(node3)
         # Add first concept scheme
         node3 = self.dom.createElement('skos:ConceptScheme')
@@ -93,13 +99,16 @@ class TestThesaurusAnalysis(unittest.TestCase):
     def test_inverse_hierarchy(self):
         """ Test if an inverted hierarchy is properly created. """
         inverse_hierarchy = analyse.create_inverse_hierarchy(self.dom)
-        self.assertEquals(len(inverse_hierarchy), 3)
+        self.assertEquals(len(inverse_hierarchy), 4)
 
     def test_property_dict(self):
         """ Test if hierarchical properties are extracted. """
         node = self.dom.childNodes.item(0).childNodes.item(0)
         property_dict = analyse.hierarchical_properties_dict(node)
-        test_dict = {'skos:narrower': ['http://concept.net/2']}
+        test_dict = {'skos:narrower': [
+            'http://concept.net/2',
+            'http://concept.net/36'
+        ]}
         self.assertEquals(property_dict, test_dict)
 
     def test_missing_concepts(self):
@@ -124,12 +133,31 @@ class TestThesaurusAnalysis(unittest.TestCase):
         missing2 = analyse.outward_difference(concept1, props2, i_props2)
         self.assertEquals(len(missing2), 2)
 
-    def test_differences_hierarchy(self):
-        """ Test if hierarchical differences are found. """
+
+    def test_missing_outward(self):
+        """ Test if missing outward references are found. """
         outward = analyse.missing_outward_references(self.dom)
 
         self.assertEquals(len(outward), 3)
 
+
+    def test_undefined_concept_references(self):
+        """ Test if referenced undefined concepts are found. """
+        undefined_concepts = analyse.undefined_concept_references(self.dom)
+        test_concepts = [
+            [
+                'http://concept.net/1',
+                'skos:narrower',
+                'http://concept.net/36'
+            ],
+            [
+                'http://concept.net/3',
+                'skos:broader',
+                'http://concept.net/36'
+            ]
+        ]
+        print(undefined_concepts)
+        self.assertEquals(undefined_concepts, test_concepts)
 
 if __name__ == '__main__':
     unittest.main()

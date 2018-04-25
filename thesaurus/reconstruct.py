@@ -37,13 +37,14 @@ def main():
     print('{} identified {} concept schemes'
     .format(time(start), len(concept_schemes)))
     # Add unknown scheme, for concepts without a type
-    concept_schemes.add('http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN')
+    concept_schemes.append('http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN')
     schemeless_concepts = list_schemeless_concepts(dom)
     print('{} {} concepts without a concept scheme'
     .format(time(start), len(schemeless_concepts)))
-    differences = hierarchical_inconsistencies(dom)
+    missing_references = missing_outward_references(dom)
     print('{} found {} hierarchical inconsistencies'
-    .format(time(start), len(differences)))
+    .format(time(start), len(missing_references)))
+    undefined_concepts = undefined_concept_references(dom)
     # dom = add_concept_schemes(dom, concept_schemes)
     # print('{} added {} concept schemes to dom'
     # .format(datetime.now() - startTime, len(concept_schemes)))
