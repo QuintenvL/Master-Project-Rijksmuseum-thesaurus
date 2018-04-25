@@ -36,10 +36,11 @@ def main():
     concept_schemes = referenced_concept_schemes(dom)
     print('{} identified {} concept schemes'
     .format(time(start), len(concept_schemes)))
-    # concept_schemes.add('http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN')
-    # schemeless_concepts = list_schemeless_concepts(dom)
-    # print('{} {} concepts without a concept scheme'
-    # .format(datetime.now() - startTime, len(schemeless_concepts)))
+    # Add unknown scheme, for concepts without a type
+    concept_schemes.add('http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN')
+    schemeless_concepts = list_schemeless_concepts(dom)
+    print('{} {} concepts without a concept scheme'
+    .format(time(start), len(schemeless_concepts)))
     # inverse_hierarchy = create_inverse_hierarchy(dom)
     # print('{} extracted {} concepts with relations to other concepts'
     # .format(datetime.now() - startTime, len(inverse_hierarchy)))
@@ -151,25 +152,6 @@ def inverse_property(property_name):
         return 'skos:broader'
     else:
         return 'skos:related'
-
-
-def list_schemeless_concepts(dom):
-    schemeless_concepts = []
-    root = dom.childNodes.item(0)
-
-    for concept in root.childNodes:
-        if concept.nodeName == 'skos:ConceptScheme':
-            continue
-        if concept.nodeType == concept.ELEMENT_NODE:
-            concept_id = concept.attributes.items()[0][1]
-            concept_properties = concept.childNodes
-            property_names = []
-
-            for property in concept_properties:
-                property_names.append(property.nodeName)
-            if 'skos:inScheme' not in property_names:
-                schemeless_concepts.append(concept_id)
-    return schemeless_concepts
 
 
 def list_hierarchical_differences(inverse_hierarchy, dom):

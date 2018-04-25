@@ -81,14 +81,14 @@ class TestThesaurusAnalysis(unittest.TestCase):
         test_schemes = ['http://concept_scheme.net/1']
         self.assertEquals(concept_schemes, test_schemes)
 
-    # def test_list_schemeless_concepts(self):
-    #     """ test if all concepts without a scheme are listed """
-    #     schemeless = reconstruct_skos.list_schemeless_concepts(self.dom)
-    #     test_schemeless = [
-    #         'http://concept.net/2',
-    #         'http://concept.net/3'
-    #     ]
-    #     self.assertEquals(schemeless, test_schemeless)
+    def test_list_schemeless_concepts(self):
+        """ Test if all concepts without a scheme are listed. """
+        schemeless = analyse.list_schemeless_concepts(self.dom)
+        test_schemeless = [
+            'http://concept.net/2',
+            'http://concept.net/3'
+        ]
+        self.assertEquals(schemeless, test_schemeless)
     #
     # def test_inverse_hierarchy(self):
     #     """ test if an inverted hierarchy is created """

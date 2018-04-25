@@ -18,9 +18,9 @@ from sets import Set
 def list_concepts(dom):
     # Create a list with the id's of the SKOS concepts
     concept_identifiers = []
-    rdf = dom.childNodes.item(0)
+    root = dom.childNodes.item(0)
 
-    for node in rdf.childNodes:
+    for node in root.childNodes:
         if (node.nodeType == node.ELEMENT_NODE
         and node.nodeName == 'skos:Concept'):
             concept_id = node.attributes.items()[0][1]
@@ -31,9 +31,9 @@ def list_concepts(dom):
 def referenced_concept_schemes(dom):
     # List all concept schemes referenced in the thesaurus
     concept_schemes = []
-    rdf = dom.childNodes.item(0)
+    root = dom.childNodes.item(0)
 
-    for node in rdf.childNodes:
+    for node in root.childNodes:
         for property in node.childNodes:
             if (property.nodeType == property.ELEMENT_NODE
             and property.nodeName == 'skos:inScheme'):
@@ -43,7 +43,23 @@ def referenced_concept_schemes(dom):
     return concept_schemes
 
 
+def list_schemeless_concepts(dom):
+    # List all concepts without that do not reference a concept scheme
+    schemeless_concepts = []
+    root = dom.childNodes.item(0)
 
+    for node in root.childNodes:
+        if (node.nodeType == node.ELEMENT_NODE
+        and node.nodeName == 'skos:Concept'):
+            concept_id = node.attributes.items()[0][1]
+            in_scheme = False
+
+            for property in node.childNodes:
+                if property.nodeName == 'skos:inScheme':
+                    in_scheme = True
+            if not in_scheme:
+                schemeless_concepts.append(concept_id)
+    return schemeless_concepts
 
 
 
