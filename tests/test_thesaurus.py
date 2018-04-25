@@ -75,11 +75,12 @@ class TestThesaurusAnalysis(unittest.TestCase):
         ]
         self.assertEqual(concepts, test_concepts)
 
-    # def test_list_concept_schemes(self):
-    #     """ test if all used concept schemes are listed """
-    #     concept_schemes = reconstruct_skos.list_concept_schemes(self.dom)
-    #     self.assertEquals(len(concept_schemes), 1)
-    #
+    def test_list_concept_schemes(self):
+        """ Test if all referenced concept schemes are listed. """
+        concept_schemes = analyse.referenced_concept_schemes(self.dom)
+        test_schemes = ['http://concept_scheme.net/1']
+        self.assertEquals(concept_schemes, test_schemes)
+
     # def test_list_schemeless_concepts(self):
     #     """ test if all concepts without a scheme are listed """
     #     schemeless = reconstruct_skos.list_schemeless_concepts(self.dom)

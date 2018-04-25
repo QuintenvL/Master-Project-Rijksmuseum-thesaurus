@@ -11,6 +11,7 @@ import os
 # from pylab import *
 from datetime import datetime
 import random
+from sets import Set
 #import matplotlib.pyplot as plt
 #from matplotlib.pyplot import show
 
@@ -27,7 +28,19 @@ def list_concepts(dom):
     return concept_identifiers
 
 
+def referenced_concept_schemes(dom):
+    # List all concept schemes referenced in the thesaurus
+    concept_schemes = []
+    rdf = dom.childNodes.item(0)
 
+    for node in rdf.childNodes:
+        for property in node.childNodes:
+            if (property.nodeType == property.ELEMENT_NODE
+            and property.nodeName == 'skos:inScheme'):
+                concept_scheme = property.attributes.items()[0][1]
+                if concept_scheme not in concept_schemes:
+                    concept_schemes.append(concept_scheme)
+    return concept_schemes
 
 
 

@@ -16,8 +16,7 @@ import csv
 from xml.dom.minidom import parse
 from shutil import copyfile
 from datetime import datetime
-from sets import Set
-from analyse import list_concepts
+from analyse import *
 
 
 def main():
@@ -34,9 +33,9 @@ def main():
     concepts = list_concepts(dom)
     print('{} analyzing {} concepts'
     .format(time(start), len(concepts)))
-    # concept_schemes = list_concept_schemes(dom)
-    # print('{} identified {} concept schemes'
-    # .format(datetime.now() - startTime, len(concept_schemes)))
+    concept_schemes = referenced_concept_schemes(dom)
+    print('{} identified {} concept schemes'
+    .format(time(start), len(concept_schemes)))
     # concept_schemes.add('http://hdl.handle.net/10934/RM0001.SCHEME.UNKOWN')
     # schemeless_concepts = list_schemeless_concepts(dom)
     # print('{} {} concepts without a concept scheme'
@@ -116,18 +115,6 @@ def time(start):
 
 
 
-def list_concept_schemes(dom):
-    # List all concept schemes referenced in the thesaurus
-    concept_schemes = Set([])
-    o_rdf = dom.childNodes.item(0)
-
-    for o_concept in o_rdf.childNodes:
-        for o_property in o_concept.childNodes:
-            if (o_property.nodeType == o_property.ELEMENT_NODE
-            and o_property.nodeName == 'skos:inScheme'):
-                property_attr = o_property.attributes.items()[0][1]
-                concept_schemes.add(property_attr)
-    return concept_schemes
 
 
 def create_inverse_hierarchy(dom):
