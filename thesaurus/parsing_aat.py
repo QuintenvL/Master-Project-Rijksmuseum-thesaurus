@@ -12,7 +12,7 @@ from datetime import datetime
 startTime = datetime.now()
 midTime = startTime
 
-os.chdir('../thesaurus_export')
+os.chdir('Outputs')
 # Dictionary of prefixes 
 prefixes = {'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#', 
             'gvp': 'http://vocab.getty.edu/ontology#',
@@ -52,7 +52,10 @@ def dict_properties (concept):
 def label_processing(list):
     return_dict = {}
     for i in list:
-        language = i.attrib.values()[0]
+        if i.attrib.values() != []:
+            language = i.attrib.values()[0]
+        else:
+            language = 'unknown'
         label = i.text.encode('utf-8')
         return_dict[label] = language
     return return_dict 
@@ -70,8 +73,8 @@ list_of_concepts = ['http://vocab.getty.edu/aat/300192974'] # Contains the start
 # 'http://vocab.getty.edu/aat/300011816'
 concept_dict = {}
 for a_concept in list_of_concepts:
-    if len(concept_dict) > 99: # Specifies the amount of concepts returned
-        break
+#     if len(concept_dict) > 99: # Specifies the amount of concepts returned
+#         break
     if a_concept in processed_concepts: # Skips concepts already gathered
         continue
     if len(concept_dict) % 100 == 0 and len(concept_dict) != 0: # Shows running time and total amount after gathering 100 concepts
