@@ -45,79 +45,32 @@ def main():
     print('{} found {} hierarchical inconsistencies'
     .format(time(start), len(missing_references)))
     undefined_concepts = undefined_concept_references(dom)
-    # dom = add_concept_schemes(dom, concept_schemes)
-    # print('{} added {} concept schemes to dom'
-    # .format(datetime.now() - startTime, len(concept_schemes)))
-    # dom = reconstruct_hierarchy(dom, concepts, differences)
+    print('{} found {} references to undefined concepts'
+    .format(time(start), len(concept_schemes)))
+    #TODO: split all analysis routines from script into smaller defenitions
+    new_dom = dom.cloneNode(dom)
+    print(new_dom)
+    new_dom = add_concept_schemes(new_dom, concept_schemes)
+    print('{} added {} concept schemes to dom'
+    .format(time(start), len(concept_schemes)))
+    #TODO: write code removing loose references and missing hierarchical references
+    # new_dom = reconstruct_hierarchy(new_dom, concepts, differences)
     # print('{} added {} hierarchical differences to dom'
     # .format(datetime.now() - startTime, len(differences)))
-    # write_dom_to_file(dom, transformed_file)
-    # print('{} wrote dom to file {}'
-    # .format(datetime.now() - startTime, transformed_file))
-    # save_schemeless(schemeless_concepts, missing_file)
-    # print('{} wrote concepts without scheme to file {}'
-    # .format(datetime.now() - startTime, missing_file))
-    # save_differences(differences, issue_file)
-    # print('{} wrote hierarchical differences to file {}'
-    # .format(datetime.now() - startTime, issue_file))
+    write_dom_to_file(new_dom, transformed_file)
+    print('{} wrote new dom to file {}'
+    .format(time(start), transformed_file))
+    save_schemeless(schemeless_concepts, missing_file)
+    print('{} wrote concepts without scheme to file {}'
+    .format(time(start), missing_file))
+    #TODO: save all results of analysis
+    save_differences(missing_references, issue_file)
+    print('{} wrote hierarchical differences to file {}'
+    .format(time(start), issue_file))
+
 
 def time(start):
     return datetime.now() - start
-# def reconstruct_hierarchy(dom, concepts, difference_lists):
-#     root = dom.childNodes.item(0)
-#
-#     #TODO: see if we can only loop through difference_lists and retrieve the property_dict based on concept_id
-#     for concept in root.childNodes:
-#         if concept.nodeName == 'skos:ConceptScheme':
-#             continue
-#         if concept.nodeType == concept.ELEMENT_NODE:
-#             concept_id = concept.attributes.items()[0][1]
-#             property_dict = create_property_dict(concept.childNodes)
-#             remove_list = []
-#
-#             # Each difference will be added to the root
-#             for difference_list in difference_lists:
-#                 #TODO: check if there is a clever way to deconstruct list
-#                 concept_id = difference_list[0]
-#                 h_label = difference_list[1]
-#                 differences = difference_list[2]
-#
-#                 for difference in differences:
-#                     # If the difference concept is missing the
-#                     # difference, a new property node will be added to
-#                     # the concept node that missed the relation property.
-#                     if difference in concepts:
-#                         if difference in property_dict[h_label]:
-#                             dom = add_element(difference, h_label, dom)
-#     return dom
-#
-# def add_element(difference, h_label, dom):
-#     root = dom.childNodes.item(0)
-#
-#     for another_concept in root.childNodes:
-#         if another_concept.nodeName == 'skos:ConceptScheme':
-#             continue
-#         if another_concept.nodeType == another_concept.ELEMENT_NODE:
-#             another_concept_id = another_concept.attributes.items()[0][1]
-#
-#             if another_concept_id == difference:
-#                 if h_label == 'skos:broader':
-#                     new_node = dom.createElement('skos:narrower')
-#                 elif h_label == 'skos:narrower':
-#                     new_node = dom.createElement('skos:broader')
-#                 elif h_label == 'skos:related':
-#                     new_node = dom.createElement('skos:related')
-#             another_concept.appendChild(new_node)
-#             new_node.setAttribute('rdf:resource', concept_id)
-#     return dom
-
-
-
-
-
-
-
-
 
 
 def add_concept_schemes(dom, concept_schemes):

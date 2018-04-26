@@ -133,8 +133,10 @@ def get_concept(dom, concept_id):
     root = dom.childNodes.item(0)
 
     for node in root.childNodes:
-        if concept_id == node.attributes.items()[0][1]:
-            return node
+        if (node.nodeType == node.ELEMENT_NODE
+        and node.nodeName == 'skos:Concept'):
+            if concept_id == node.attributes.items()[0][1]:
+                return node
     return None
 
 
@@ -181,7 +183,8 @@ def hierarchical_properties_dict(node):
                 hierarchical_properties[prop_name] = [object_id]
     return hierarchical_properties
 
-
+#TODO: update code to match current folder structure
+# break code in smaller defs.
 # def create_concept_list(root):
 #
 #     a_list = ['altLabel','prefLabel', 'broader', 'narrower', 'related', 'schemes', 'matches', 'change dates', 'notes']
