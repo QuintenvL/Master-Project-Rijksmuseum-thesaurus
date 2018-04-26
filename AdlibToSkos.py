@@ -6,6 +6,7 @@ Created on 13 mrt. 2018
 # Import all necessary packages
 import os 
 import csv
+import shutil
 from xml.dom.minidom import parse
 from shutil import copyfile
 from datetime import datetime
@@ -13,11 +14,12 @@ from datetime import datetime
 startTime = datetime.now()
 
 # The name specifications of the used and created files
-orginial_file = 'R_thesaurus_material_20180221.rdf'
-transformed_file = 'Material_transformed.rdf'
-issue_file = 'differences_materials.csv'
-missing_file = 'missing_materials.csv'
-os.chdir('../thesaurus_export') # The location to store and access the files
+orginial_file = raw_input() #'R_thesaurus_material_20180221.rdf'
+transformed_file = 'Output.rdf'
+issue_file = 'Differences.csv'
+missing_file = 'Typeless_concepts.csv'
+current_dir = os.getcwd()
+
 
 # Definition that opens a XML file and updates the changes made
 def change_file(root, file):
@@ -64,9 +66,13 @@ for o_concept in o_rdf.childNodes:
 
 # The transformed file is an exact copy of the original file
 copyfile(orginial_file, transformed_file)
+old_file = current_dir + "/" +transformed_file
+new_file = current_dir + "/Outputs/" + transformed_file
+shutil.move(old_file, new_file)
+os.chdir('Outputs') # The location to store and access the files
 
 # List of differences and typeless concepts are created
-full_list_of_differnces = []
+full_list_of_differences = []
 typeless_concepts = []
 # The root of the RDF file is found and selected
 n_dom = parse(transformed_file)
@@ -128,11 +134,10 @@ for concept in root.childNodes:
         if concept_id in hierarchy_dict:
             for h_label in hierarchy_labels:
                 if h_label in property_dict and h_label in hierarchy_dict[concept_id]:
-                    length_property = len(property_dict[h_label])
                     difference = list(set(property_dict[h_label]) - set(hierarchy_dict[concept_id][h_label]))
                     if difference != []:
                         difference_list = [concept_id, h_label, difference]
-                        full_list_of_differnces.append(difference_list)
+                        full_list_of_differences.append(difference_list)
 # Each difference will be added to the root
                         a_remove_list = []
                         for a_difference in difference:
@@ -194,8 +199,8 @@ for concept in root.childNodes:
                                 del property_dict[h_label]
 # Another difference, caused by the absence of a relation label in the property dictionary is handled by adding the missing property relation to the concept
                 elif h_label not in property_dict and h_label in hierarchy_dict[concept_id]:
-                    difference_list = [concept_id, h_label,hierarchy_dict[concept_id][h_label]]
-                    full_list_of_differnces.append(difference_list)
+                    difference_list = [concept_id, h_label, list(hierarchy_dict[concept_id][h_label])]
+                    full_list_of_differences.append(difference_list)
                     for t_dif in hierarchy_dict[concept_id][h_label]:
                         if t_dif == concept_id:
                             continue
@@ -209,8 +214,8 @@ for concept in root.childNodes:
                         change_file(n_dom, transformed_file)
 # Another difference, caused by the absence of a relation label in the hierarchy dictionary is handled by adding the missing property relation to the other concept of the relation
                 elif h_label in property_dict and h_label not in hierarchy_dict[concept_id]:
-                    difference_list = [concept_id, h_label,property_dict[h_label]]
-                    full_list_of_differnces.append(difference_list)
+                    difference_list = [concept_id, h_label, list(property_dict[h_label])]
+                    full_list_of_differences.append(difference_list)
                     q_remove_list = []
                     for r_dif in property_dict[h_label]:
                         if r_dif in full_list_of_concepts:
@@ -253,8 +258,8 @@ for concept in root.childNodes:
         else:
             for t_label in hierarchy_labels:
                 if t_label in property_dict:
-                    difference_list = [concept_id, t_label,property_dict[t_label]]
-                    full_list_of_differnces.append(difference_list)
+                    difference_list = [concept_id, t_label, list(property_dict[t_label])]
+                    full_list_of_differences.append(difference_list)
                     remove_list = []
                     for r_concept in property_dict[t_label]:
                         if r_concept in full_list_of_concepts:
@@ -282,6 +287,7 @@ for concept in root.childNodes:
                     if t_label in property_dict:
                         if len(property_dict[t_label]) < 1:
                             del property_dict[t_label]
+                    
 # The last change is the addition of skos:topConceptOf nodes to concepts without any broader relations. These nodes are created for every scheme of the concept.
         if 'skos:broader' not in property_dict:
             if 'skos:inScheme' in property_dict:
@@ -316,12 +322,12 @@ for concept in root.childNodes:
                                 
 # xml_file.close()
                                 
-# Each difference is written to a csv file            
+# Each difference is written to a csv file 
 header_list = ['concept 1', 'type of relation', 'concept 2']
 d_file  = open(issue_file, "wb")
 writer = csv.writer(d_file) 
 writer.writerow(header_list)
-for d in full_list_of_differnces:
+for d in full_list_of_differences:
     writer.writerow(d)
 d_file.close()
 
@@ -333,6 +339,3 @@ for missing in typeless_concepts:
 b_file.close()              
 
 print datetime.now() - startTime
-
-                 
- 
