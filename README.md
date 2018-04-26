@@ -1,9 +1,34 @@
-# Master-Project-Rijksmuseum-thesaurus
+# Rijksmuseum thesaurus project
 
-In this Github folder the Python scripts, SPARQL queries and other pieces of code used in the Master Project about the thesaurus of the Rijksmuseum done by Quinten van Langen, Master student Information Sciences at the VU Amsterdam, is stored.
+In this Github folder the Python scripts, SPARQL queries and other pieces of code used in the Master Project about the thesaurus of the Rijksmuseum done by Quinten van Langen, Master student Information Sciences at the VU Amsterdam, are stored.
 
-The first file is the adlib to skos Python script that is used to transform the Skos output of the Adlib thesaurus of the Rijksmuseum to the right SKOS structure for importation into the PoolParty system. 
+## Reconstruct SKOS
+The reconstruct_skos.py file contains the Adlib to Poolparty Python script that is used to transform the SKOS output of the Adlib thesaurus of the Rijksmuseum to the correct SKOS structure that can be imported into the PoolParty system.
 
-The Parsing AAT.py file parsed the Getty AAT. The current version of the code is specified to the materials found in the AAT. 
+To run the script:
+```
+python thesaurus/reconstruct.py
+```
 
-The AnalyseAdlib.py file analyze the adlib files on different aspects (relations, labels). All these quantitative analyses are stored in xlsx files (Adlib_full.xlsx and Adlib_materials.xlsx). 
+To run tests:
+```
+python -m unittest -v tests.test_thesaurus
+```
+
+## Parsing the AAT
+The Parsing AAT.py file parses the Getty AAT. The current version of the code is specified to the materials found in the AAT.
+
+To run the script:
+
+## Analyse thesaurus
+The AnalyseAdlib.py file analyze the Adlib files on different aspects (relations, labels). All these quantitative analyses are stored in xlsx files (Adlib_full.xlsx and Adlib_materials.xlsx).
+
+To run the script:
+```
+python thesaurus/analyse.py
+```
+
+To run tests:
+```
+python -m unittest -v tests.test_thesaurus.TestThesaurusAnalysis
+```
