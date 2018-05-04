@@ -46,7 +46,6 @@ def main():
         if len(concept_dict) % 100 == 0 and len(concept_dict) != 0: # Shows running time and total amount after gathering 100 concepts
             print('{} Gathered {} concepts'
             .format(time(start), len(concept_dict)))
-            midTime = datetime.now()
     #Opens the download URL and checks if it is responsing
         website = a_concept + '.rdf'
         urllib.urlretrieve (website, "file.rdf")
