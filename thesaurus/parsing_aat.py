@@ -6,7 +6,7 @@ Created on 6 apr. 2018
 import urllib
 import os
 import xml.etree.ElementTree as ET
-# import pandas as pd
+import pandas as pd
 from xml.dom.minidom import parse
 import csv
 import pickle
@@ -98,9 +98,9 @@ def main():
     print('{} Saved the properties of all concepts to file {}'
     .format(time(start), dict_file))
 
-#     write_analyse_file(concept_dict, analyse_file)
-#     print('{} write analyse results to the file {}'
-#     .format(time(start), analyse_file))   
+    write_analyse_file(concept_dict, analyse_file)
+    print('{} write analyse results to the file {}'
+    .format(time(start), analyse_file))   
 
 #Function to gather properties of a AAT concept and return it in a dictionary
 def gather_properties (concept):
