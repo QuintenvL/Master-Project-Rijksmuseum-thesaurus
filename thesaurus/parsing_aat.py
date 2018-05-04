@@ -6,7 +6,7 @@ Created on 6 apr. 2018
 import urllib
 import os
 import xml.etree.ElementTree as ET
-import pandas as pd
+# import pandas as pd
 from xml.dom.minidom import parse
 import csv
 import pickle
