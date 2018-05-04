@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:aat="http://vocab.getty.edu/aat/"
+	xmlns:aat_contrib="http://vocab.getty.edu/aat/contrib/"
+	xmlns:aat_rel="http://vocab.getty.edu/aat/rel/"
+	xmlns:aat_rev="http://vocab.getty.edu/aat/rev/"
+	xmlns:aat_scopeNote="http://vocab.getty.edu/aat/scopeNote/"
+	xmlns:aat_source="http://vocab.getty.edu/aat/source/"
+	xmlns:aat_source_rev="http://vocab.getty.edu/aat/source/rev/"
+	xmlns:aat_term="http://vocab.getty.edu/aat/term/"
+	xmlns:adms="http://www.w3.org/ns/adms#"
+	xmlns:bibo="http://purl.org/ontology/bibo/"
+	xmlns:bio="http://purl.org/vocab/bio/0.1/"
+	xmlns:cc="http://creativecommons.org/ns#"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:dcat="http://www.w3.org/ns/dcat#"
+	xmlns:dct="http://purl.org/dc/terms/"
+	xmlns:dctype="http://purl.org/dc/dcmitype/"
+	xmlns:fmt="http://www.w3.org/ns/formats/"
+	xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	xmlns:freq="http://purl.org/cld/freq/"
+	xmlns:gvp="http://vocab.getty.edu/ontology#"
+	xmlns:gvp_lang="http://vocab.getty.edu/language/"
+	xmlns:iso="http://purl.org/iso25964/skos-thes#"
+	xmlns:luc="http://www.ontotext.com/owlim/lucene#"
+	xmlns:ontogeo="http://www.ontotext.com/owlim/geo#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:prov="http://www.w3.org/ns/prov#"
+	xmlns:ptop="http://www.ontotext.com/proton/protontop#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rr="http://www.w3.org/ns/r2rml#"
+	xmlns:rrx="http://purl.org/r2rml-ext/"
+	xmlns:schema="http://schema.org/"
+	xmlns:sd="http://www.w3.org/ns/sparql-service-description#"
+	xmlns:sesame="http://www.openrdf.org/schema/sesame#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:skosxl="http://www.w3.org/2008/05/skos-xl#"
+	xmlns:tgn="http://vocab.getty.edu/tgn/"
+	xmlns:tgn_contrib="http://vocab.getty.edu/tgn/contrib/"
+	xmlns:tgn_rel="http://vocab.getty.edu/tgn/rel/"
+	xmlns:tgn_rev="http://vocab.getty.edu/tgn/rev/"
+	xmlns:tgn_scopeNote="http://vocab.getty.edu/tgn/scopeNote/"
+	xmlns:tgn_source="http://vocab.getty.edu/tgn/source/"
+	xmlns:tgn_source_rev="http://vocab.getty.edu/tgn/source/rev/"
+	xmlns:tgn_term="http://vocab.getty.edu/tgn/term/"
+	xmlns:ulan="http://vocab.getty.edu/ulan/"
+	xmlns:ulan_bio="http://vocab.getty.edu/ulan/bio/"
+	xmlns:ulan_contrib="http://vocab.getty.edu/ulan/contrib/"
+	xmlns:ulan_event="http://vocab.getty.edu/ulan/event/"
+	xmlns:ulan_rel="http://vocab.getty.edu/ulan/rel/"
+	xmlns:ulan_rev="http://vocab.getty.edu/ulan/rev/"
+	xmlns:ulan_scopeNote="http://vocab.getty.edu/ulan/scopeNote/"
+	xmlns:ulan_source="http://vocab.getty.edu/ulan/source/"
+	xmlns:ulan_source_rev="http://vocab.getty.edu/ulan/source/rev/"
+	xmlns:ulan_term="http://vocab.getty.edu/ulan/term/"
+	xmlns:vaem="http://www.linkedmodel.org/schema/vaem#"
+	xmlns:vann="http://purl.org/vocab/vann/"
+	xmlns:vcard="http://www.w3.org/2006/vcard/ns#"
+	xmlns:vdpp="http://data.lirmm.fr/ontologies/vdpp#"
+	xmlns:voaf="http://purl.org/vocommons/voaf#"
+	xmlns:voag="http://voag.linkedmodel.org/voag#"
+	xmlns:void="http://rdfs.org/ns/void#"
+	xmlns:wdrs="http://www.w3.org/2007/05/powder-s#"
+	xmlns:wgs="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	xmlns:wv="http://vocab.org/waiver/terms/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+<gvp:Subject rdf:about="http://vocab.getty.edu/aat/300011826">
+	<rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+	<rdf:type rdf:resource="http://vocab.getty.edu/ontology#Concept"/>
+	<rdfs:label xml:lang="en">horn (animal material)</rdfs:label>
+	<rdfs:label xml:lang="zh-hant">角 (動物材料)</rdfs:label>
+	<rdfs:label xml:lang="zh-latn-wadegile">chiao</rdfs:label>
+	<rdfs:label xml:lang="zh-latn-pinyin-x-hanyu">jiǎo</rdfs:label>
+	<rdfs:label xml:lang="zh-latn-pinyin-x-notone">jiao</rdfs:label>
+	<rdfs:label xml:lang="nl">hoorn</rdfs:label>
+	<rdfs:label xml:lang="fr">corne</rdfs:label>
+	<rdfs:label xml:lang="de">Horn (tierisches Material)</rdfs:label>
+	<rdfs:label xml:lang="es">cuerno (material de queratina)</rdfs:label>
+	<rdfs:seeAlso rdf:resource="http://www.getty.edu/vow/AATFullDisplay?find=&amp;logic=AND&amp;note=&amp;subjectid=300011826"/>
+	<dct:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1988-01-01T00:00:00</dct:created>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1992-02-05T00:00:00</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1992-03-04T00:00:00</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T15:51:54</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2001-07-26T22:00:44</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2007-10-26T09:04:43</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2013-03-29T09:27:24</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2010-04-23T00:17:14</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2011-01-08T01:36:59</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-09-23T09:20:12</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-09-23T09:20:13</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2013-03-29T09:27:25</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2002-01-07T11:18:43</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T15:50:34</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T15:39:12</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T16:04:59</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2001-07-26T22:15:03</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2007-03-19T13:52:39</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2007-10-26T09:05:46</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2011-05-09T13:27:29</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2007-11-12T11:27:39</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2008-03-05T12:28:30</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2012-03-16T14:05:01</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T15:39:40</dct:modified>
+	<dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2011-01-08T01:37:00</dct:modified>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5000025586"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5001083670"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5001680951"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5002226639"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5002935646"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003342673"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003342674"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003342675"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003342676"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5004215763"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003929030"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003929031"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5000025588"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5001170726"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5001488915"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5001616013"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003929050"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003929058"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003929068"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5000025589"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5001684793"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5001691584"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5001714583"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003023913"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003175779"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003929029"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003929032"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5002226644"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5002935652"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5003342689"/>
+	<skos:changeNote rdf:resource="http://vocab.getty.edu/aat/rev/5004215774"/>
+	<gvp:broader rdf:resource="http://vocab.getty.edu/aat/300192973"/>
+	<gvp:broaderGenericExtended rdf:resource="http://vocab.getty.edu/aat/300011793"/>
+	<gvp:broaderGenericExtended rdf:resource="http://vocab.getty.edu/aat/300265629"/>
+	<gvp:broaderGenericExtended rdf:resource="http://vocab.getty.edu/aat/300010358"/>
+	<gvp:broaderGenericExtended rdf:resource="http://vocab.getty.edu/aat/300192973"/>
+	<gvp:broaderGenericExtended rdf:resource="http://vocab.getty.edu/aat/300206573"/>
+	<gvp:broaderGenericExtended rdf:resource="http://vocab.getty.edu/aat/300264091"/>
+	<gvp:broaderGenericExtended rdf:resource="http://vocab.getty.edu/aat/300010357"/>
+	<gvp:broaderExtended rdf:resource="http://vocab.getty.edu/aat/300011793"/>
+	<gvp:broaderExtended rdf:resource="http://vocab.getty.edu/aat/300265629"/>
+	<gvp:broaderExtended rdf:resource="http://vocab.getty.edu/aat/300010358"/>
+	<gvp:broaderExtended rdf:resource="http://vocab.getty.edu/aat/300192973"/>
+	<gvp:broaderExtended rdf:resource="http://vocab.getty.edu/aat/300206573"/>
+	<gvp:broaderExtended rdf:resource="http://vocab.getty.edu/aat/300264091"/>
+	<gvp:broaderExtended rdf:resource="http://vocab.getty.edu/aat/300010357"/>
+	<gvp:broaderPreferredExtended rdf:resource="http://vocab.getty.edu/aat/300011793"/>
+	<gvp:broaderPreferredExtended rdf:resource="http://vocab.getty.edu/aat/300265629"/>
+	<gvp:broaderPreferredExtended rdf:resource="http://vocab.getty.edu/aat/300010358"/>
+	<gvp:broaderPreferredExtended rdf:resource="http://vocab.getty.edu/aat/300192973"/>
+	<gvp:broaderPreferredExtended rdf:resource="http://vocab.getty.edu/aat/300206573"/>
+	<gvp:broaderPreferredExtended rdf:resource="http://vocab.getty.edu/aat/300264091"/>
+	<gvp:broaderPreferredExtended rdf:resource="http://vocab.getty.edu/aat/300010357"/>
+	<gvp:parentString>keratinous material, animal material, biological material, &lt;materials by origin&gt;, materials (substances), Materials (hierarchy name), Materials Facet</gvp:parentString>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/scopeNote/46539"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/scopeNote/60968"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/scopeNote/99716"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/scopeNote/136792"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/scopeNote/109753"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5000025586"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5001083670"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5001680951"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5002226639"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5002935646"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003342673"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003342674"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003342675"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003342676"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5004215763"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003929030"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003929031"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5000025588"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5001170726"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5001488915"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5001616013"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003929050"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003929058"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003929068"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5000025589"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5001684793"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5001691584"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5001714583"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003023913"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003175779"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003929029"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003929032"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5002226644"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5002935652"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5003342689"/>
+	<skos:note rdf:resource="http://vocab.getty.edu/aat/rev/5004215774"/>
+	<gvp:parentStringAbbrev>keratinous material, animal material, ... Materials Facet</gvp:parentStringAbbrev>
+	<gvp:displayOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">7</gvp:displayOrder>
+	<skosxl:prefLabel rdf:resource="http://vocab.getty.edu/aat/term/1000011826-en"/>
+	<skosxl:prefLabel rdf:resource="http://vocab.getty.edu/aat/term/1000547075-zh-Hant"/>
+	<skosxl:prefLabel rdf:resource="http://vocab.getty.edu/aat/term/1000547077-zh-Latn-pinyin-x-hanyu"/>
+	<skosxl:prefLabel rdf:resource="http://vocab.getty.edu/aat/term/1000547076-zh-Latn-pinyin-x-notone"/>
+	<skosxl:prefLabel rdf:resource="http://vocab.getty.edu/aat/term/1000547078-zh-Latn-wadegile"/>
+	<skosxl:prefLabel rdf:resource="http://vocab.getty.edu/aat/term/1000470460-nl"/>
+	<skosxl:prefLabel rdf:resource="http://vocab.getty.edu/aat/term/1000313263-fr"/>
+	<skosxl:prefLabel rdf:resource="http://vocab.getty.edu/aat/term/1000653194-de"/>
+	<skosxl:prefLabel rdf:resource="http://vocab.getty.edu/aat/term/1000417882-es"/>
+	<skos:prefLabel xml:lang="en">horn (animal material)</skos:prefLabel>
+	<skos:prefLabel xml:lang="zh-hant">角 (動物材料)</skos:prefLabel>
+	<skos:prefLabel xml:lang="zh-latn-wadegile">chiao</skos:prefLabel>
+	<skos:prefLabel xml:lang="zh-latn-pinyin-x-hanyu">jiǎo</skos:prefLabel>
+	<skos:prefLabel xml:lang="zh-latn-pinyin-x-notone">jiao</skos:prefLabel>
+	<skos:prefLabel xml:lang="nl">hoorn</skos:prefLabel>
+	<skos:prefLabel xml:lang="fr">corne</skos:prefLabel>
+	<skos:prefLabel xml:lang="de">Horn (tierisches Material)</skos:prefLabel>
+	<skos:prefLabel xml:lang="es">cuerno (material de queratina)</skos:prefLabel>
+	<gvp:broaderGeneric rdf:resource="http://vocab.getty.edu/aat/300192973"/>
+	<gvp:broaderPreferred rdf:resource="http://vocab.getty.edu/aat/300192973"/>
+	<skos:broader rdf:resource="http://vocab.getty.edu/aat/300192973"/>
+	<iso:broaderGeneric rdf:resource="http://vocab.getty.edu/aat/300192973"/>
+	<gvp:prefLabelGVP rdf:resource="http://vocab.getty.edu/aat/term/1000011826-en"/>
+	<skos:inScheme rdf:resource="http://vocab.getty.edu/aat/"/>
+	<skos:scopeNote rdf:resource="http://vocab.getty.edu/aat/scopeNote/46539"/>
+	<skos:scopeNote rdf:resource="http://vocab.getty.edu/aat/scopeNote/60968"/>
+	<skos:scopeNote rdf:resource="http://vocab.getty.edu/aat/scopeNote/99716"/>
+	<skos:scopeNote rdf:resource="http://vocab.getty.edu/aat/scopeNote/136792"/>
+	<skos:scopeNote rdf:resource="http://vocab.getty.edu/aat/scopeNote/109753"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000000"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000131"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000159"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000205"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000088"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000178"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000232"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000048434"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000099099"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000003801-subject-300011826"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000024811-subject-300011826"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000035251-subject-300011826"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000051089-subject-300011826"/>
+	<skos:related rdf:resource="http://vocab.getty.edu/aat/300011796"/>
+	<skos:related rdf:resource="http://vocab.getty.edu/aat/300025287"/>
+	<skos:related rdf:resource="http://vocab.getty.edu/aat/300400473"/>
+	<dc:identifier>300011826</dc:identifier>
+	<gvp:aat2100_distinguished_from rdf:resource="http://vocab.getty.edu/aat/300011796"/>
+	<gvp:aat2315_used_by rdf:resource="http://vocab.getty.edu/aat/300025287"/>
+	<gvp:aat2502_material_for rdf:resource="http://vocab.getty.edu/aat/300400473"/>
+	<skos:broaderTransitive rdf:resource="http://vocab.getty.edu/aat/300011793"/>
+	<skos:broaderTransitive rdf:resource="http://vocab.getty.edu/aat/300265629"/>
+	<skos:broaderTransitive rdf:resource="http://vocab.getty.edu/aat/300010358"/>
+	<skos:broaderTransitive rdf:resource="http://vocab.getty.edu/aat/300192973"/>
+	<void:inDataset rdf:resource="http://vocab.getty.edu/dataset/aat"/>
+	<cc:license rdf:resource="http://opendatacommons.org/licenses/by/1.0/"/>
+	<dct:license rdf:resource="http://opendatacommons.org/licenses/by/1.0/"/>
+	<prov:wasGeneratedBy>
+		<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5000025586">
+			<rdf:type rdf:resource="http://www.w3.org/ns/prov#Create"/>
+			<dc:type>created</dc:type>
+			<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1988-01-01T00:00:00</prov:startedAtTime>
+		</prov:Activity>
+	</prov:wasGeneratedBy>
+</gvp:Subject>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5001083670">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>term added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2001-07-26T22:00:44</prov:startedAtTime>
+	<dc:description>horn (1000011826);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5001680951">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>term added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2007-10-26T09:04:43</prov:startedAtTime>
+	<dc:description>corne (1000313263);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5002226639">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>term added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2010-04-23T00:17:14</prov:startedAtTime>
+	<dc:description>cuerno (1000417882);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5002935646">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>term added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2011-01-08T01:36:59</prov:startedAtTime>
+	<dc:description>hoorn (1000470460);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003342673">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>term added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2013-03-29T09:27:24</prov:startedAtTime>
+	<dc:description>角 (1000547075);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003342674">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>term added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2013-03-29T09:27:24</prov:startedAtTime>
+	<dc:description>chiao (1000547078);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003342675">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>term added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2013-03-29T09:27:24</prov:startedAtTime>
+	<dc:description>jiao (1000547076);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003342676">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>term added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2013-03-29T09:27:24</prov:startedAtTime>
+	<dc:description>jiǎo (1000547077);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5004215763">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>term added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-09-23T09:20:12</prov:startedAtTime>
+	<dc:description>Horn (1000653194);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003929030">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>note updated</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T15:39:12</prov:startedAtTime>
+	<dc:description>Language: English (70051)</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003929031">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>note updated</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T15:39:12</prov:startedAtTime>
+	<dc:description>Language: Spanish (70641)</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5000025588">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>relation added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1992-03-04T00:00:00</prov:startedAtTime>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5001170726">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>relation added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2001-07-26T22:15:03</prov:startedAtTime>
+	<dc:description>horn (300011826) 'related to' antler (300011796);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5001488915">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>relation added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2002-01-07T11:18:43</prov:startedAtTime>
+	<dc:description>horn (300011826) 'agent' hornworkers (300025287);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5001616013">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>relation added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2007-03-19T13:52:39</prov:startedAtTime>
+	<dc:description>horn (300011826) 'distinguished from' antler (300011796);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003929050">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>relation added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T15:50:34</prov:startedAtTime>
+	<dc:description>horn (animal material) (300011826) 'material for' horns (300400473);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003929058">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>relation added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T15:51:54</prov:startedAtTime>
+	<dc:description>horn (animal material) (300011826) 'material for' horns (300400474);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003929068">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>relation deleted</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T16:04:59</prov:startedAtTime>
+	<dc:description>horn (animal material) (300011826) 'material for' feathers (300400474);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5000025589">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>moved</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1992-02-05T00:00:00</prov:startedAtTime>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5001684793">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>updated</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2007-10-26T09:05:46</prov:startedAtTime>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5001691584">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>updated</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2007-11-12T11:27:39</prov:startedAtTime>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5001714583">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>updated</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2008-03-05T12:28:30</prov:startedAtTime>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003023913">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>parent added</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2011-05-09T13:27:29</prov:startedAtTime>
+	<dc:description>&lt;animal or human components&gt; (300251797);</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003175779">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>updated</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2012-03-16T14:05:01</prov:startedAtTime>
+	<dc:description>GCI Source and Contributor added</dc:description>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003929029">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>updated</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T15:39:12</prov:startedAtTime>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<prov:Activity rdf:about="http://vocab.getty.edu/aat/rev/5003929032">
+	<rdf:type rdf:resource="http://www.w3.org/ns/prov#Modify"/>
+	<dc:type>updated</dc:type>
+	<prov:startedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-01-27T15:39:40</prov:startedAtTime>
+	<prov:used rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+</prov:Activity>
+<bibo:DocumentPart rdf:about="http://vocab.getty.edu/aat/source/2000003801-subject-300011826">
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000003801"/>
+	<bibo:locator>horns</bibo:locator>
+</bibo:DocumentPart>
+<bibo:DocumentPart rdf:about="http://vocab.getty.edu/aat/source/2000024811-subject-300011826">
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000024811"/>
+	<bibo:locator>horns</bibo:locator>
+</bibo:DocumentPart>
+<bibo:DocumentPart rdf:about="http://vocab.getty.edu/aat/source/2000035251-subject-300011826">
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000035251"/>
+	<bibo:locator>horns</bibo:locator>
+</bibo:DocumentPart>
+<bibo:DocumentPart rdf:about="http://vocab.getty.edu/aat/source/2000051089-subject-300011826">
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000051089"/>
+	<bibo:locator>124737 checked 26 January 2012</bibo:locator>
+</bibo:DocumentPart>
+<gvp:ScopeNote rdf:about="http://vocab.getty.edu/aat/scopeNote/46539">
+	<rdf:value xml:lang="en">Material comprising horns, the hard, semitranslucent, proteinaceous structures that grow from the head of some mammals, such as cattle, sheep, goats, and antelope. Horn, like nails, claws, and hooves, is composed of epidermal cells known as keratin. Rhinoceros horns are formed from matted hair. The colours of horn range from a light cream to black. Horn can be cut, engraved, or carved, and has been used since ancient times for tools and ornamentation. The thermoplastic material is softened with steam or boiling water then pressed into numerous shapes. In the 18th century, London was the center of the horn molding industry, primarily making snuff boxes and decorative containers. Distinguished from "antler (material)," which is the fast-growing bone of deer. </rdf:value>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000000"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000047822"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000099620"/>
+	<dc:identifier>46539</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388277"/>
+</gvp:ScopeNote>
+<gvp:ScopeNote rdf:about="http://vocab.getty.edu/aat/scopeNote/60968">
+	<rdf:value xml:lang="es">Excrecencia de piel modificada o de pelo compacto que se presenta habitualmente en pares y se proyectan desde los huesos frontales o a ambos lados del cráneo, formada por una cutícula no caediza compuesta de queratina. Distinguir de "asta", que es un hueso modificado.</rdf:value>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000131"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000051034"/>
+	<dc:identifier>60968</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300389311"/>
+</gvp:ScopeNote>
+<gvp:ScopeNote rdf:about="http://vocab.getty.edu/aat/scopeNote/99716">
+	<rdf:value xml:lang="nl">Uitgroei van aangepaste huid of zeer compact haar, vaak in paren die uitsteken vanaf de voorhoofdsbotten aan beide zijdes van de schedel en bestaan uit een permanente opperhuid van keratine. Te onderscheiden van 'gewei', dat bestaat uit aangepast been.</rdf:value>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000205"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000099099"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000099619"/>
+	<dc:identifier>99716</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388256"/>
+</gvp:ScopeNote>
+<gvp:ScopeNote rdf:about="http://vocab.getty.edu/aat/scopeNote/136792">
+	<rdf:value xml:lang="de">Auswuchs aus veränderter Haut oder Haarsträngen, häufig paarweise auftretend und auf dem frontalen Knochen auf jeder Seite des Schädels austertend, die aus einer jahreszeitunäbhängigen Cuticula aus Keratin besteht, wird vom "Geweih", einem veränderten Knochen, unterschieden.</rdf:value>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000232"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000084808"/>
+	<dc:identifier>136792</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388344"/>
+</gvp:ScopeNote>
+<gvp:ScopeNote rdf:about="http://vocab.getty.edu/aat/scopeNote/109753">
+	<rdf:value xml:lang="zh-hant">皮膚或毛髮特化而成的衍生物，通常成對存在，突出於頭顱兩側的額骨，為角蛋白成分的不脫落角質層。與「叉角」（antler）不同，叉角是骨頭特化而成。</rdf:value>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000178"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000052784"/>
+	<dc:identifier>109753</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388116"/>
+</gvp:ScopeNote>
+<skosxl:Label rdf:about="http://vocab.getty.edu/aat/term/1000011826-en">
+	<gvp:term xml:lang="en">horn</gvp:term>
+	<gvp:qualifier xml:lang="en">animal material</gvp:qualifier>
+	<gvp:displayOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">1</gvp:displayOrder>
+	<skosxl:literalForm xml:lang="en">horn (animal material)</skosxl:literalForm>
+	<gvp:termType rdf:resource="http://vocab.getty.edu/term/type/Descriptor"/>
+	<gvp:termPOS rdf:resource="http://vocab.getty.edu/term/POS/Noun"/>
+	<gvp:contributorPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000000"/>
+	<gvp:contributorPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000088"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000000"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000088"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000027681"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000042061"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000047822"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000051089-term-1000011826"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000027681"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000042061"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000047822"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000051089-term-1000011826"/>
+	<dc:identifier>1000011826</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388277"/>
+</skosxl:Label>
+<skosxl:Label rdf:about="http://vocab.getty.edu/aat/term/1000547075-zh-Hant">
+	<gvp:term xml:lang="zh-hant">角</gvp:term>
+	<gvp:qualifier xml:lang="zh-hant">動物材料</gvp:qualifier>
+	<gvp:displayOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">2</gvp:displayOrder>
+	<skosxl:literalForm xml:lang="zh-hant">角 (動物材料)</skosxl:literalForm>
+	<gvp:termType rdf:resource="http://vocab.getty.edu/term/type/Descriptor"/>
+	<gvp:contributorPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000178"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000178"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000065194-term-1000547075"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000093499-term-1000547075"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000065196-term-1000547075"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000065197-term-1000547075"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000093495-term-1000547075"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000065199-term-1000547075"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000065194-term-1000547075"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000093499-term-1000547075"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000065196-term-1000547075"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000065197-term-1000547075"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000093495-term-1000547075"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000065199-term-1000547075"/>
+	<dc:identifier>1000547075</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388116"/>
+</skosxl:Label>
+<skosxl:Label rdf:about="http://vocab.getty.edu/aat/term/1000547077-zh-Latn-pinyin-x-hanyu">
+	<gvp:term xml:lang="zh-latn-pinyin-x-hanyu">jiǎo</gvp:term>
+	<gvp:displayOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">3</gvp:displayOrder>
+	<skosxl:literalForm xml:lang="zh-latn-pinyin-x-hanyu">jiǎo</skosxl:literalForm>
+	<gvp:termType rdf:resource="http://vocab.getty.edu/term/type/UsedForTerm"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000178"/>
+	<gvp:contributorNonPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000178"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000052784"/>
+	<gvp:sourceNonPreferred rdf:resource="http://vocab.getty.edu/aat/source/2000052784"/>
+	<dc:identifier>1000547077</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388117"/>
+</skosxl:Label>
+<skosxl:Label rdf:about="http://vocab.getty.edu/aat/term/1000547076-zh-Latn-pinyin-x-notone">
+	<gvp:term xml:lang="zh-latn-pinyin-x-notone">jiao</gvp:term>
+	<gvp:displayOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">4</gvp:displayOrder>
+	<skosxl:literalForm xml:lang="zh-latn-pinyin-x-notone">jiao</skosxl:literalForm>
+	<gvp:termType rdf:resource="http://vocab.getty.edu/term/type/UsedForTerm"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000178"/>
+	<gvp:contributorNonPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000178"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000052784"/>
+	<gvp:sourceNonPreferred rdf:resource="http://vocab.getty.edu/aat/source/2000052784"/>
+	<dc:identifier>1000547076</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388118"/>
+</skosxl:Label>
+<skosxl:Label rdf:about="http://vocab.getty.edu/aat/term/1000547078-zh-Latn-wadegile">
+	<gvp:term xml:lang="zh-latn-wadegile">chiao</gvp:term>
+	<gvp:displayOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">5</gvp:displayOrder>
+	<skosxl:literalForm xml:lang="zh-latn-wadegile">chiao</skosxl:literalForm>
+	<gvp:termType rdf:resource="http://vocab.getty.edu/term/type/UsedForTerm"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000178"/>
+	<gvp:contributorNonPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000178"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000052784"/>
+	<gvp:sourceNonPreferred rdf:resource="http://vocab.getty.edu/aat/source/2000052784"/>
+	<dc:identifier>1000547078</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388121"/>
+</skosxl:Label>
+<skosxl:Label rdf:about="http://vocab.getty.edu/aat/term/1000470460-nl">
+	<gvp:term xml:lang="nl">hoorn</gvp:term>
+	<gvp:displayOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">6</gvp:displayOrder>
+	<skosxl:literalForm xml:lang="nl">hoorn</skosxl:literalForm>
+	<gvp:termType rdf:resource="http://vocab.getty.edu/term/type/Descriptor"/>
+	<gvp:contributorPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000205"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000205"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000099619"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000099099"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000099619"/>
+	<dc:identifier>1000470460</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388256"/>
+</skosxl:Label>
+<skosxl:Label rdf:about="http://vocab.getty.edu/aat/term/1000313263-fr">
+	<gvp:term xml:lang="fr">corne</gvp:term>
+	<gvp:displayOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">7</gvp:displayOrder>
+	<skosxl:literalForm xml:lang="fr">corne</skosxl:literalForm>
+	<gvp:termType rdf:resource="http://vocab.getty.edu/term/type/Descriptor"/>
+	<gvp:termPOS rdf:resource="http://vocab.getty.edu/term/POS/Noun"/>
+	<gvp:contributorPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000159"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000000"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000159"/>
+	<gvp:contributorNonPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000000"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000048434"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000048434"/>
+	<dc:identifier>1000313263</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388306"/>
+</skosxl:Label>
+<skosxl:Label rdf:about="http://vocab.getty.edu/aat/term/1000653194-de">
+	<gvp:term xml:lang="de">Horn</gvp:term>
+	<gvp:qualifier xml:lang="de">tierisches Material</gvp:qualifier>
+	<gvp:displayOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">8</gvp:displayOrder>
+	<skosxl:literalForm xml:lang="de">Horn (tierisches Material)</skosxl:literalForm>
+	<gvp:termType rdf:resource="http://vocab.getty.edu/term/type/Descriptor"/>
+	<gvp:termPOS rdf:resource="http://vocab.getty.edu/term/POS/BothSingularAndPlural"/>
+	<gvp:contributorPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000232"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000232"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000083634-term-1000653194"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000083630-term-1000653194"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000083801-term-1000653194"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000083634-term-1000653194"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000083630-term-1000653194"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000083801-term-1000653194"/>
+	<dc:identifier>1000653194</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300388344"/>
+</skosxl:Label>
+<skosxl:Label rdf:about="http://vocab.getty.edu/aat/term/1000417882-es">
+	<gvp:term xml:lang="es">cuerno</gvp:term>
+	<gvp:qualifier xml:lang="es">material de queratina</gvp:qualifier>
+	<gvp:displayOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">9</gvp:displayOrder>
+	<skosxl:literalForm xml:lang="es">cuerno (material de queratina)</skosxl:literalForm>
+	<gvp:termType rdf:resource="http://vocab.getty.edu/term/type/Descriptor"/>
+	<gvp:contributorPreferred rdf:resource="http://vocab.getty.edu/aat/contrib/10000131"/>
+	<dct:contributor rdf:resource="http://vocab.getty.edu/aat/contrib/10000131"/>
+	<gvp:sourcePreferred rdf:resource="http://vocab.getty.edu/aat/source/2000048810-term-1000417882"/>
+	<dct:source rdf:resource="http://vocab.getty.edu/aat/source/2000048810-term-1000417882"/>
+	<dc:identifier>1000417882</dc:identifier>
+	<dct:language rdf:resource="http://vocab.getty.edu/aat/300389311"/>
+</skosxl:Label>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000051089-term-1000011826">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000051089"/>
+	<bibo:locator>124737 checked 26 January 2012</bibo:locator>
+</bibo:Document>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000065194-term-1000547075">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000065194"/>
+	<bibo:locator>847</bibo:locator>
+</bibo:Document>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000093499-term-1000547075">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000093499"/>
+	<bibo:locator>August 14, 2010</bibo:locator>
+</bibo:Document>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000065196-term-1000547075">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000065196"/>
+	<bibo:locator>19</bibo:locator>
+</bibo:Document>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000065197-term-1000547075">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000065197"/>
+	<bibo:locator>September 6, 2011</bibo:locator>
+</bibo:Document>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000093495-term-1000547075">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000093495"/>
+	<bibo:locator>September 6, 2011</bibo:locator>
+</bibo:Document>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000065199-term-1000547075">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000065199"/>
+	<bibo:locator>9</bibo:locator>
+</bibo:Document>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000083634-term-1000653194">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000083634"/>
+	<bibo:locator>http://www.duden.de/rechtschreibung/Horn</bibo:locator>
+</bibo:Document>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000083630-term-1000653194">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000083630"/>
+	<bibo:locator>http://d-nb.info/gnd/4160661-9</bibo:locator>
+</bibo:Document>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000083801-term-1000653194">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000083801"/>
+	<bibo:locator>http://www.zeno.org/nid/2000679114X</bibo:locator>
+</bibo:Document>
+<bibo:Document rdf:about="http://vocab.getty.edu/aat/source/2000048810-term-1000417882">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/DocumentPart"/>
+	<dct:isPartOf rdf:resource="http://vocab.getty.edu/aat/source/2000048810"/>
+	<bibo:locator>I:834</bibo:locator>
+</bibo:Document>
+<rdf:Statement rdf:about="http://vocab.getty.edu/aat/rel/300011826-aat2502_material_for-300400473">
+	<rdf:subject rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+	<rdf:predicate rdf:resource="http://vocab.getty.edu/ontology#aat2502_material_for"/>
+	<rdf:object rdf:resource="http://vocab.getty.edu/aat/300400473"/>
+</rdf:Statement>
+<rdf:Statement rdf:about="http://vocab.getty.edu/aat/rel/300011826-aat2315_used_by-300025287">
+	<rdf:subject rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+	<rdf:predicate rdf:resource="http://vocab.getty.edu/ontology#aat2315_used_by"/>
+	<rdf:object rdf:resource="http://vocab.getty.edu/aat/300025287"/>
+</rdf:Statement>
+<rdf:Statement rdf:about="http://vocab.getty.edu/aat/rel/300011826-aat2100_distinguished_from-300011796">
+	<rdf:subject rdf:resource="http://vocab.getty.edu/aat/300011826"/>
+	<rdf:predicate rdf:resource="http://vocab.getty.edu/ontology#aat2100_distinguished_from"/>
+	<rdf:object rdf:resource="http://vocab.getty.edu/aat/300011796"/>
+</rdf:Statement>
+
+</rdf:RDF>

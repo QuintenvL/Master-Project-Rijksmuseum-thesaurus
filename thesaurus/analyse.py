@@ -12,6 +12,8 @@ import os
 from datetime import datetime
 import random
 from sets import Set
+import re
+from anytree import Node
 #import matplotlib.pyplot as plt
 #from matplotlib.pyplot import show
 
@@ -107,7 +109,7 @@ def missing_outward_references(dom):
     for concept_id in inverse_hierarchy:
         concept = get_concept(dom, concept_id)
         if concept is not None:
-            properties = hierarchical_properties_dict(concept)
+            properties = hierarchical_properties_dict(concept, 'no')
             i_properties = inverse_hierarchy[concept_id]
             missing = outward_difference(concept_id, properties, i_properties)
             if missing != []:
@@ -127,7 +129,7 @@ def outward_difference(concept_id, props, i_props):
             missing = [concept_id, h_label, diff]
             missing_references.append(missing)
     return missing_references
-
+    
 
 def get_concept(dom, concept_id):
     root = dom.childNodes.item(0)
@@ -137,6 +139,24 @@ def get_concept(dom, concept_id):
         and node.nodeName == 'skos:Concept'):
             if concept_id == node.attributes.items()[0][1]:
                 return node
+    return None
+
+def get_concept_scheme(dom, scheme):
+    root = dom.childNodes.item(0)
+    for node in root.childNodes:
+        if (node.nodeType == node.ELEMENT_NODE
+        and node.nodeName == 'skos:ConceptScheme'):
+            if scheme == node.attributes.items()[0][1]:
+                return node
+    return None
+
+
+def get_relation_property(concept, property, attribute):
+    for node in concept.childNodes:
+        if (node.nodeType == node.ELEMENT_NODE
+        and node.nodeName == property 
+        and node.attributes.items()[0][1] == attribute):
+            return node
     return None
 
 
@@ -165,7 +185,7 @@ def undefined_concept_references(dom):
     return missing_references
 
 
-def hierarchical_properties_dict(node):
+def hierarchical_properties_dict(node, extra):
     # Each hierarchical property is stored in a dictionary with the name of the
     # property and its value.
     hierarchical_properties = {}
@@ -175,13 +195,280 @@ def hierarchical_properties_dict(node):
         if (property.nodeType == property.ELEMENT_NODE
         and property.nodeName in hierarchy_labels):
             prop_name = property.nodeName
-            object_id = property.attributes.items()[0][1]
-
+            if extra == 'yes':
+                object_id = re.findall(r'\b\d+\b', property.attributes.items()[0][1])[-1]
+            else:
+                object_id = property.attributes.items()[0][1]
             if prop_name in hierarchical_properties:
                 hierarchical_properties[prop_name].append(object_id)
             else:
                 hierarchical_properties[prop_name] = [object_id]
     return hierarchical_properties
+
+def label_properties_dict(node):
+    # Each label is stored in a dictionary with the label itself and it's language
+    label_properties = {}
+    label_labels = ['skos:prefLabel', 'skos:altLabel']
+    label_properties['prefLabel'] = []
+    label_properties['altLabel'] = []
+    for property in node.childNodes:
+        if (property.nodeType == property.ELEMENT_NODE
+        and property.nodeName in label_labels):
+            property_dict = {}
+            prop_name = property.nodeName[5:]
+            language = str(property.attributes.items()[0][1])
+            label = str(property.childNodes[0].data.encode('utf-8'))
+            property_dict['language'] = language
+            property_dict['label'] = label
+            label_properties[prop_name].append(property_dict)
+    return label_properties
+
+def extra_properties_dict(node):
+    # Some extra properties for a concept are stored in a dictionary
+    extra_properties_dict = {}
+    extra_labels = ['skos:scopeNote', 'skos:exactMatch', 'skos:topConceptOf']
+    create_labels = ['notes', 'matches']
+    for label in create_labels:
+        extra_properties_dict[label] = []
+    topConcept_count = 0
+    for property in node.childNodes:
+        if (property.nodeType == property.ELEMENT_NODE
+        and property.nodeName in extra_labels):
+            prop_name = property.nodeName[5:]
+            if prop_name == 'scopeNote':
+                the_note = str(property.childNodes[0].data.encode('utf-8'))
+                extra_properties_dict['notes'].append(the_note)
+            elif prop_name == 'topConceptOf':
+                topConcept_count += 1
+            elif prop_name == 'exactMatch':
+                match = property.attributes.items()[0][1]
+                extra_properties_dict['matches'].append(match)
+    extra_properties_dict['#Top concepts'] = topConcept_count
+    return extra_properties_dict
+
+def restructre_missing_references(a_list):
+    # Restructures the list of missing references
+    return_list = []
+    for i in a_list:
+        for j in i:
+            another_list = j[-1]
+            j.pop()
+            for the in another_list:
+                j.append(str(the))
+                return_list.append(j)
+    return return_list
+
+def find_top_concepts(dom):
+    # Create a list of concepts without broader concepts
+    root = dom.childNodes.item(0)
+    list_of_top_concepts = []
+    for node in root.childNodes:
+        if (node.nodeType == node.ELEMENT_NODE
+        and node.nodeName == 'skos:Concept'):
+            hierarchical_properties = hierarchical_properties_dict(node, 'no')
+            concept_id = node.attributes.items()[0][1]
+            if 'skos:broader' not in hierarchical_properties:
+                list_of_top_concepts.append(concept_id)
+    return list_of_top_concepts
+
+def find_all_schemes(dom, extra):
+    # Create a dictionary which stores all schemes of a concept
+    schemes_dict = {}
+    root = dom.childNodes.item(0)
+    for node in root.childNodes:
+        if (node.nodeType == node.ELEMENT_NODE
+        and node.nodeName == 'skos:Concept'):
+            if extra == 'yes':
+                concept_id = re.findall(r'\b\d+\b', node.attributes.items()[0][1])[-1]
+            else:
+                concept_id = node.attributes.items()[0][1]
+            schemes_dict[concept_id] = []
+            for property in node.childNodes:
+                if property.nodeName == 'skos:inScheme':
+                    if extra == 'yes':
+                        scheme_label = property.attributes.items()[0][1][42:]
+                    else:
+                        scheme_label = property.attributes.items()[0][1]
+                    schemes_dict[concept_id].append(scheme_label)
+    return schemes_dict
+
+def all_properties(dom, extra):
+    # Create a list of all relevant properties for each concept
+    all_properties_dict = {}
+    schemes_dict = find_all_schemes(dom, 'yes')
+    root = dom.childNodes.item(0)
+    for concept in root.childNodes:
+        if (concept.nodeType == concept.ELEMENT_NODE
+        and concept.nodeName == 'skos:Concept'):
+            concept_id = re.findall(r'\b\d+\b', concept.attributes.items()[0][1])[-1]
+            all_properties_dict[concept_id] = {}
+            all_properties_dict[concept_id]["id"] = concept_id
+            all_properties_dict[concept_id].update(hierarchical_properties_dict(concept, 'yes'))
+            hierarchy_labels = ['skos:broader', 'skos:narrower', 'skos:related']
+            for label in hierarchy_labels:
+                if label not in all_properties_dict[concept_id]:
+                    all_properties_dict[concept_id][label] = []
+            all_properties_dict[concept_id].update(label_properties_dict(concept))
+            if extra == 'yes':
+                all_properties_dict[concept_id]['schemes'] = schemes_dict[concept_id]
+                all_properties_dict[concept_id].update(extra_properties_dict(concept))
+    all_properites_dict = determine_depth(all_properties_dict)
+
+    all_properties_list = []
+    for a_concept in all_properties_dict:
+        all_properties_list.append(all_properties_dict[a_concept])
+    return all_properties_list
+
+
+
+def determine_depth(concept_dict):
+    # Determining the depth of each concept in the hierarchical tree
+    list_of_tuples = []
+    node_dict = {}
+    for concept in concept_dict:
+        concept_id = concept_dict[concept]['id']
+        node_dict[concept_id] = Node(str(concept_id))
+        broader = concept_dict[concept]['skos:broader']
+        if broader == []:
+            continue
+        for b in broader:
+            new_tuple = (concept_id, b)
+            if new_tuple not in list_of_tuples:
+                list_of_tuples.append(new_tuple)
+    for j in list_of_tuples:
+        child = j[0]
+        parent = j[1]
+        if child == parent:
+            continue
+        if child in concept_dict and parent in concept_dict:
+            node_dict[child].parent = node_dict[parent]
+    for concept in concept_dict:
+        depth = int(len(node_dict[concept_dict[concept]['id']].path) - 1)
+        concept_dict[concept]['Depth'] = depth
+    return concept_dict
+
+def reference_analyse(list):
+    # Perform quantitative analysis of the reference properties
+    references_dict = {}
+    total_broader = {}
+    total_narrower = {}
+    total_related = {}
+    for concept in list:
+        broader = concept['skos:broader']
+        narrower = concept['skos:narrower']
+        related = concept['skos:related']
+        number_broader = len(broader)
+        number_narrower = len(narrower)
+        number_related = len(related)
+        references_dict[concept['id']] = [number_broader, number_narrower, number_related]
+        total = number_broader + number_narrower + number_related
+        if number_broader in total_broader:
+            total_broader[number_broader] += 1
+        else:
+            total_broader[number_broader] = 1
+        if number_narrower in total_narrower:
+            total_narrower[number_narrower] += 1
+        else:
+            total_narrower[number_narrower] = 1
+        if number_related in total_related:
+            total_related[number_related] += 1
+        else:
+            total_related[number_related] = 1
+    return_list = [total_broader, total_narrower, total_related]
+    reference_dict = create_reference_dict(references_dict)
+    return reference_dict, return_list
+
+def create_reference_dict(dict):
+    # Create a type of dictionary about all references of a concept
+    reference_dict = {}
+    for concept in dict:
+        references = dict[concept]
+        string_references = ""
+        for i in references:
+            string_references += str(i)
+            string_references += '-'
+        string_references = ''.join(string_references.split())[:-1].upper()
+        if string_references in reference_dict:
+            reference_dict[string_references] += 1
+        else:
+            reference_dict[string_references] = 1
+    return reference_dict
+
+def label_analyse(list):
+    # Perform a quantitative analysis on the labels of a concept
+    concept_label_dict = {}
+    count_label_dict = {}
+    language_label_dict = {}
+    count_label_dict ['pref'] = {}
+    count_label_dict ['alt'] = {}
+    language_label_dict ['pref'] = {}
+    language_label_dict ['alt'] = {}
+    for concept in list:
+        concept_id = concept['id']
+        label_dict = {}
+        pref = concept['prefLabel']
+        alt = concept['altLabel']
+        label_dict['pref'] = pref
+        label_dict['alt'] = alt
+        if len(pref) in count_label_dict ['pref']:
+            count_label_dict ['pref'][len(pref)] += 1
+        else:
+            count_label_dict ['pref'][len(pref)] = 1
+        if len(alt) in count_label_dict ['alt']:
+            count_label_dict ['alt'][len(alt)] += 1
+        else:
+            count_label_dict ['alt'][len(alt)] = 1
+        label_dict['#pref'] = len(pref)
+        label_dict['#alt'] = len(alt)
+        pref_language_list = []
+        for i in pref:
+            language = i['language']
+            pref_language_list.append(language)
+            language_label_dict ['pref'][language] = language_label_dict ['pref'].get(language, 0) + 1
+        label_dict['Pref languages'] = pref_language_list
+        alt_language_list = []
+        for i in alt:
+            language = i['language']
+            alt_language_list.append(language)
+            language_label_dict ['alt'][language] = language_label_dict ['alt'].get(language, 0) + 1
+        label_dict['Alt languages'] = alt_language_list
+        concept_label_dict[concept['id']] = label_dict
+    return concept_label_dict, language_label_dict, count_label_dict
+
+def is_number(s):
+    # Check if a string is a number
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False    
+
+def matches_analyse(list):
+    # Perform a quantitative 
+    key_list = ['none', 'AAT', 'TGN', 'MIMO', 'Wiki', 'Numbers', 'Geonames', 'other']
+    number_matches_dict = {}
+    for key in key_list:
+        number_matches_dict[key] = 0
+    for concept in list:
+        if len(concept['matches']) == 0:
+            number_matches_dict['none'] += 1
+        else:
+            for match in concept['matches']:
+                if 'aat' in match:
+                    number_matches_dict['AAT'] += 1
+                elif 'tgn' in match or 'TGN' in match:
+                    number_matches_dict['TGN'] += 1
+                elif 'mimo' in match:
+                    number_matches_dict['MIMO'] += 1
+                elif 'wiki' in match:
+                    number_matches_dict['Wiki'] += 1  
+                elif is_number(match):
+                    number_matches_dict['Numbers'] += 1  
+                elif 'geonames' in match:
+                    number_matches_dict['Geonames'] += 1
+                else:
+                    number_matches_dict['other'] += 1
+    return number_matches_dict
 
 #TODO: update code to match current folder structure
 # break code in smaller defs.
