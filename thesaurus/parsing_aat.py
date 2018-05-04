@@ -67,8 +67,8 @@ def main():
             new_list = []
             for i in generic_broaders:
                 new_list.append(i.attrib.values()[0])
-            if 'http://vocab.getty.edu/aat/300264091' not in new_list and concept_id != 'http://vocab.getty.edu/aat/300264091': # Specify the material facet
-                continue
+#             if 'http://vocab.getty.edu/aat/300264091' not in new_list and concept_id != 'http://vocab.getty.edu/aat/300264091': # Specify the material facet
+#                 continue
             if '{http://www.w3.org/2004/02/skos/core#}exactMatch' in properties_list:
                 match = concept.findall('skos:exactMatch', prefixes)
                 for i in match:
