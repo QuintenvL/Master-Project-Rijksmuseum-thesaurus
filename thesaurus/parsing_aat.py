@@ -98,9 +98,9 @@ def main():
     print('{} Saved the properties of all concepts to file {}'
     .format(time(start), dict_file))
 
-    write_analyse_file(concept_dict, analyse_file)
-    print('{} write analyse results to the file {}'
-    .format(time(start), analyse_file))   
+#     write_analyse_file(concept_dict, analyse_file)
+#     print('{} write analyse results to the file {}'
+#     .format(time(start), analyse_file))   
 
 #Function to gather properties of a AAT concept and return it in a dictionary
 def gather_properties (concept):
