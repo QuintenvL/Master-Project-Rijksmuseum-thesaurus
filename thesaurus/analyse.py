@@ -470,6 +470,15 @@ def matches_analyse(list):
                     number_matches_dict['other'] += 1
     return number_matches_dict
 
+def type_analyse(list):
+    scheme_dict = {}
+    for concept in list:
+        schemes = concept['schemes']
+        for scheme in schemes:
+            scheme_dict[scheme] = my_dict.get(scheme, 0) + 1
+    return scheme_dict
+
+
 #TODO: update code to match current folder structure
 # break code in smaller defs.
 # def create_concept_list(root):

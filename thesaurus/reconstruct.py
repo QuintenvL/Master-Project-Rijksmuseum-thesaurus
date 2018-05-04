@@ -92,7 +92,6 @@ def main():
     save_schemeless(schemeless_concepts, typeless_file)
     print('{} wrote concepts without scheme to file {}'
     .format(time(start), typeless_file))
-    #TODO: save all results of analysis
     save_differences(missing_references, undefined_concepts, issue_file)
     print('{} wrote hierarchical differences to file {}'
     .format(time(start), issue_file))
@@ -244,7 +243,9 @@ def write_analyse_file(list, file):
     matches_dict = matches_analyse(list)
     matches_df = pd.DataFrame(matches_dict.items(), columns=['Matches', '#'])   
     matches_df.to_excel(writer, sheet_name='Matches')
-
+    type_dict = type_analyse(list)
+    type_df = pd.DataFrame.from_dict(type_dict, orient='index')
+    type_df.to_excel(writer, sheet_name='Types')
 
 # main loop from AdlibToSkos.py
 # # The next part runs over all concepts in the root
