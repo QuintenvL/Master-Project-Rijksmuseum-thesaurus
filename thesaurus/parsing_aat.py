@@ -39,53 +39,57 @@ def main():
     list_of_concepts = ['http://vocab.getty.edu/aat/300192974'] # Contains the start concept
     concept_dict = {}
     for a_concept in list_of_concepts:
-        if len(concept_dict) > int(set_maximum) - 1: # Specifies the amount of concepts returned
-            break
-        if a_concept in processed_concepts: # Skips concepts already gathered
-            continue
-        if len(concept_dict) % 100 == 0 and len(concept_dict) != 0: # Shows running time and total amount after gathering 100 concepts
-            print('{} Gathered {} concepts'
-            .format(time(start), len(concept_dict)))
-    #Opens the download URL and checks if it is responsing
-        website = a_concept + '.rdf'
-        urllib.urlretrieve (website, "file.rdf")
-        if urllib.urlopen(website).code != 200:
-            break
-    #Gather all the wanted information of a concept and store it a dictionary
-        tree = ET.parse('file.rdf')
-        root = tree.getroot()
-        concepts = root.findall('gvp:Subject', prefixes)
-        for concept in concepts:
-            concept_id = concept.attrib.values()[0]
-            processed_concepts.append(concept_id)
-            properties_list = []
-            for labels in concept:
-                if labels.tag not in properties_list:
-                    properties_list.append(labels.tag)
-            generic_broaders = concept.findall('gvp:broaderExtended', prefixes)
-            new_list = []
-            for i in generic_broaders:
-                new_list.append(i.attrib.values()[0])
-#             if 'http://vocab.getty.edu/aat/300264091' not in new_list and concept_id != 'http://vocab.getty.edu/aat/300264091': # Specify the material facet
-#                 continue
-            if '{http://www.w3.org/2004/02/skos/core#}exactMatch' in properties_list:
-                match = concept.findall('skos:exactMatch', prefixes)
-                for i in match:
-                    for j in i:
-                        for labels in concept:
-                            if labels.tag not in properties_list:
-                                properties_list.append(labels.tag)
-                        concept_dict[concept_id], list_of_properties = gather_properties(j)
-                        short_concept_id = re.findall(r'\b\d+\b', concept.attrib.items()[0][1])[-1]
-                        concept_dict[concept_id]['id'] = short_concept_id
-                        concept_dict[concept_id]['labels'] = properties_list
-                        list_of_concepts += list_of_properties[0] + list_of_properties[1] + list_of_properties[2]
-            else:
-                concept_dict[concept_id], list_of_properties = gather_properties(concept)
-                short_concept_id = re.findall(r'\b\d+\b', concept.attrib.items()[0][1])[-1]
-                concept_dict[concept_id]['id'] = short_concept_id
-                concept_dict[concept_id]['labels'] = properties_list
-                list_of_concepts += list_of_properties[0] + list_of_properties[1] + list_of_properties[2]        
+        try:
+            if len(concept_dict) > int(set_maximum) - 1: # Specifies the amount of concepts returned
+                break
+            if a_concept in processed_concepts: # Skips concepts already gathered
+                continue
+            if len(concept_dict) % 100 == 0 and len(concept_dict) != 0: # Shows running time and total amount after gathering 100 concepts
+                print('{} Gathered {} concepts'
+                .format(time(start), len(concept_dict)))
+        #Opens the download URL and checks if it is responsing
+            website = a_concept + '.rdf'
+            urllib.urlretrieve (website, "file.rdf")
+            if urllib.urlopen(website).code != 200:
+                continue
+        #Gather all the wanted information of a concept and store it a dictionary
+            tree = ET.parse('file.rdf')
+            root = tree.getroot()
+            concepts = root.findall('gvp:Subject', prefixes)
+            for concept in concepts:
+                concept_id = concept.attrib.values()[0]
+                processed_concepts.append(concept_id)
+                properties_list = []
+                for labels in concept:
+                    if labels.tag not in properties_list:
+                        properties_list.append(labels.tag)
+                generic_broaders = concept.findall('gvp:broaderExtended', prefixes)
+                new_list = []
+                for i in generic_broaders:
+                    new_list.append(i.attrib.values()[0])
+                # if 'http://vocab.getty.edu/aat/300264091' not in new_list and concept_id != 'http://vocab.getty.edu/aat/300264091': # Specify the material facet
+                #     continue
+                if '{http://www.w3.org/2004/02/skos/core#}exactMatch' in properties_list:
+                    match = concept.findall('skos:exactMatch', prefixes)
+                    for i in match:
+                        for j in i:
+                            for labels in concept:
+                                if labels.tag not in properties_list:
+                                    properties_list.append(labels.tag)
+                            concept_dict[concept_id], list_of_properties = gather_properties(j)
+                            short_concept_id = re.findall(r'\b\d+\b', concept.attrib.items()[0][1])[-1]
+                            concept_dict[concept_id]['id'] = short_concept_id
+                            concept_dict[concept_id]['labels'] = properties_list
+                            list_of_concepts += list_of_properties[0] + list_of_properties[1] + list_of_properties[2]
+                else:
+                    concept_dict[concept_id], list_of_properties = gather_properties(concept)
+                    short_concept_id = re.findall(r'\b\d+\b', concept.attrib.items()[0][1])[-1]
+                    concept_dict[concept_id]['id'] = short_concept_id
+                    concept_dict[concept_id]['labels'] = properties_list
+                    list_of_concepts += list_of_properties[0] + list_of_properties[1] + list_of_properties[2]
+        except IOError:
+            pass
+            continue        
 
     print('{} Finished collecting {} concepts'
     .format(time(start), len(concept_dict)))
