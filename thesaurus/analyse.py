@@ -91,6 +91,7 @@ def create_inverse_hierarchy(dom):
     return hierarchy_dict
 
 
+
 def inverse_property(property_name):
     if property_name == 'skos:broader':
         return 'skos:narrower'
@@ -178,7 +179,6 @@ def undefined_concept_references(dom):
                 and property.nodeName in hierarchy_labels):
                     object_id = property.attributes.items()[0][1]
                     h_label = property.nodeName
-
                     if object_id not in concepts:
                         missing = [concept_id, h_label, object_id]
                         missing_references.append(missing)
@@ -254,8 +254,9 @@ def restructre_missing_references(a_list):
             another_list = j[-1]
             j.pop()
             for the in another_list:
-                j.append(str(the))
-                return_list.append(j)
+                copy_j = list(j)
+                copy_j.append(str(the))
+                return_list.append(copy_j)
     return return_list
 
 def find_top_concepts(dom):
@@ -475,7 +476,7 @@ def type_analyse(list):
     for concept in list:
         schemes = concept['schemes']
         for scheme in schemes:
-            scheme_dict[scheme] = my_dict.get(scheme, 0) + 1
+            scheme_dict[scheme] = scheme_dict.get(scheme, 0) + 1
     return scheme_dict
 
 
