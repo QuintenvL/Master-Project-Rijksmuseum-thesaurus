@@ -20,6 +20,11 @@ The Parsing AAT.py file parses the Getty AAT. The current version of the code is
 
 To run the script:
 
+```
+python thesaurus/parsing_aat.py
+```
+
+
 ## Analyse thesaurus
 The AnalyseAdlib.py file analyze the Adlib files on different aspects (relations, labels). All these quantitative analyses are stored in xlsx files (Adlib_full.xlsx and Adlib_materials.xlsx).
 
@@ -32,3 +37,5 @@ To run tests:
 ```
 python -m unittest -v tests.test_thesaurus.TestThesaurusAnalysis
 ```
+
+All created outputs are stored in the 'out' folder. 
