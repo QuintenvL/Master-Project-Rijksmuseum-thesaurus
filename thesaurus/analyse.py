@@ -1,22 +1,221 @@
-'''
-Created on 27 mrt. 2018
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Analyze thesauri
 
-@author: Gebruiker
-'''
+Script with functions to analyze a thesaurus.
+"""
 
+__author__ = "Quinten van Langen"
+__version__ = "1.0.0"
+__license__ = "cc0-1.0"
+
+
+import pickle
 import xml.etree.ElementTree as ET
-#import pandas as pd
+import pandas as pd
 import os
-# from lxml import objectify
-# from pylab import *
 from datetime import datetime
 import random
 from sets import Set
 import re
 from anytree import Node
-#import matplotlib.pyplot as plt
-#from matplotlib.pyplot import show
 
+def time(start):
+    return datetime.now() - start
+
+def find_matches(dict1): # Create a list and dictionary of stored matches
+    matches_dict = {}
+    AAT_match_list = []
+    Dutch_AAT_match_list = []
+    misplaced_AAT_list = []
+
+    for concept in dict1:
+        matches = dict1[concept]['matches']
+        for match in matches:
+            if 'aat' in match:
+                if 'vocab.getty.edu' in match:
+                    match = re.findall(r'\b\d+\b', match)[-1]
+                    matches_dict[match] = concept
+                    AAT_match_list.append(match)
+                elif 'browser.aat-ned' in match:
+                    matches_dict[match] = concept
+                    Dutch_AAT_match_list.append(match)
+                else:
+                    misplaced_AAT_list.append(match)
+    AAT_match_list = list(set(AAT_match_list))
+    print('{} Created lists and dictionary of AAT matches'
+    .format(time(start)))
+    return matches_dict, AAT_match_list, Dutch_AAT_match_list, misplaced_AAT_list
+    
+def match_in_AAT(AAT_dict, AAT_match_list): # Check if a match is present in the AAT dictionary
+    matches_in_aat_dict = {}
+    matches_in_aat_list = []
+    for concept in AAT_dict:
+        the_id = str(AAT_dict[concept]['id'])
+        if the_id in AAT_match_list:
+            matches_in_aat_dict[concept] = the_id
+            matches_in_aat_list.append(the_id)
+
+    matches_in_aat_list = list(set(matches_in_aat_list))
+    print('{} Searched for the matches in AAT'
+    .format(time(start)))
+    return matches_in_aat_list, matches_in_aat_dict
+
+def matches_not_in_parse(match_dict, match_list1, match_list2, RT_dict): # determine the amount of matches that are not parsed from the AAT
+    difference_list = list(set(match_list1) - set(match_list2))
+    missing_aat_list = []
+    for difference in difference_list:
+        missing_aat_list.append(RT_dict[match_dict[difference]])
+    return missing_aat_list
+
+def own_overlap(thesaurus_dict): #Look at the overlap in labels within a thesaurus
+    copy_dict = dict(thesaurus_dict)
+    the_own_overlap_dict = {}
+    label_list = []
+
+    for concept1 in thesaurus_dict:
+        labels_concept1 = thesaurus_dict[concept1]['prefLabel'] + thesaurus_dict[concept1]['altLabel']
+        concept1 = re.findall(r'\b\d+\b', concept1)[-1]
+        for a_label in labels_concept1:
+            for concept2 in copy_dict:
+                labels_concept2 = copy_dict[concept2]['prefLabel'] + copy_dict[concept2]['altLabel']
+                concept2 = re.findall(r'\b\d+\b', concept2)[-1]         
+                if a_label in labels_concept2:
+                    combination_list = [concept2, a_label]
+                    combination_list2 = [concept1, a_label]
+                    if combination_list == combination_list2:
+                        continue
+                    if a_label not in label_list:
+                        if concept2 in the_own_overlap_dict and combination_list2 in the_own_overlap_dict[concept2]:
+                            continue
+                        else:
+                            if concept1 not in the_own_overlap_dict:
+                                the_own_overlap_dict[concept1] = [combination_list]
+                            elif combination_list not in the_own_overlap_dict[concept1]:
+                                the_own_overlap_dict[concept1].append(combination_list)
+            label_list.append(a_label)
+    the_own_overlap_list = restructure_dict_to_list(the_own_overlap_dict)
+    return the_own_overlap_dict
+
+def store_dict(dict, picklefile): # Store a Python dictionary in a pickle file
+    output = open(picklefile, wb)
+    pickle.dump(dict, output)
+    output.close()
+
+def restructure_dict_to_list(dict): # Restructures the own overlap dictionary to a list
+    return_list = []
+    for overlap in dict:
+        for a_list in dict[overlap]:
+            new_list = [overlap] + a_list
+            return_list.append(new_list)
+    return return_list
+
+def find_overlap(full_dict1, full_dict2): # Search for all overlapping concepts based on the labels
+    overlap_dict = {}
+    for concept1 in full_dict1:
+        concept1_labels = full_dict1[concept1]['prefLabel'] + full_dict1[concept1]['altLabel']
+        for a_label in concept1_labels:
+            for concept2 in full_dict2:
+                concept2_labels = full_dict2[concept2]['prefLabel'] + full_dict2[concept2]['altLabel']
+                if a_label in AAT_labels:
+                    concept1_matches = full_dict1[concept1]['matches']
+                    if concept1 in overlap_dict:
+                        overlap_dict[concept1].append(a_label)
+                    else:
+                        overlap_dict[concept1] = [concept2, rt_matches, a_label]
+
+    store_dict(overlap_dict, 'overlap_dict2.pkl')
+    print('{} Finished looking at ovelap and stored the overlapping concepts in a dictionary'
+    .format(time(start)))
+    return overlap_dict
+
+def matched_overlap(overlap_dict, match_dict): #Look at the amount of overlapping concepts have a match stored as url
+    count = 0
+    stored_match_types = {}
+    overlap_list = []
+    for overlap in overlap_dict:
+        list_of_labels = create_list_of_labels(overlap_dict[overlap])
+        the_id = re.findall(r'\b\d+\b', overlap)[-1]
+        overlap_list.append(the_id + list_of_labels)
+        if the_id in match_dict:
+            concept1 = overlap_dict[overlap][0]
+            concept_types = full_RT[RT_concept]['schemes']
+            for a_type in concept_types:
+                if a_type not in stored_match_types:
+                    stored_match_types[a_type] = 1
+                else:
+                    stored_match_types[a_type] += 1
+            count += 1
+    print('{} {} of the {} overlapping concepts are already matched'
+    .format(time(start), count, len(overlap_dict)))
+    matched_overlap_count = count
+    return matched_overlap_count, stored_match_types, overlap_list
+
+def create_list_of_labels(dict_list): #creates a list of labels from the list made for the overlap dictionary
+    return_list = []
+    label_list = []
+    for item in dict_list:
+        if dict_list.index(item) > 1:
+            label_list.append(item)
+        else:
+            return_list.append(item)
+    return_list.append(label_list)
+    return return_list
+
+def find_type_of_overlap(overlap_dict, full_dict): # Look at the types and their amounts of the overlap concepts
+    overlap_types = {}
+    for overlap in overlap_dict:
+        the_concept = overlap_dict[overlap][0]
+        the_types = full_dict[the_concept]['schemes']
+        for a_type in the_types:
+            if a_type not in overlap_types:
+                overlap_types[a_type] = 1
+            else:
+                overlap_types[a_type] += 1
+    return overlap_types
+
+def write_to_xlsxfile(values, filename, sheet_name, headers):
+    writer = pd.ExcelWriter(filename, engine='xlsxwriter')
+    if type(values) == dict:
+        if headers == []:
+            the_dataframe = pd.Dataframe.from_dict(values, orient='index')
+        else:
+            the_dataframe = pd.Dataframe.from_dict(values, orient='index', columns=headers)
+    elif type(values) == list:
+        if headers == []:
+            the_dataframe = pd.Dataframe(values)
+        else:
+            the_dataframe = pd.Dataframe(values, columns=headers)
+    else:
+        return None
+    the_dataframe.t0_excel(writer, sheet_name= sheet_name)
+    writer.close()
+
+def load_dictionaries(): # Load pickle dictionaries
+
+    start = datetime.now()
+    os.chdir('out')
+    # Load the Rijksmuseum thesaurus, AAT and overlap dictionaries
+    full_RT = pickle.load( open( "full2_dictionary.pkl", "rb" ) )
+    print('{} Loaded the Rijksmuseum dictionary'
+    .format(time(start)))
+
+    full_AAT = pickle.load(open('AAT/AAT_full_dictionary.pkl', 'rb'))
+    print('{} Loaded the AAT dictionary'
+    .format(time(start)))
+
+    overlap_dict = pickle.load(open('overlap_dict.pkl', 'rb'))
+    print('{} Loaded the overlap dictionary'
+    .format(time(start)))
+
+    full_own = pickle.load( open( "own_overlap_dict.pkl", "rb" ) )
+    print('{} Loaded the own Rijksmuseum overlap dictionary with a length of {}'
+    .format(time(start), len(full_own)))
+
+    full_own_AAT = pickle.load( open( "shorten_own_overlap_dict_AAT.pkl", "rb" ) )
+    print('{} Loaded the own overlap AAT dictionary with a length of {}'
+    .format(time(start), len(full_own_AAT)))
 
 def list_concepts(dom):
     # Create a list with the id's of the SKOS concepts
@@ -246,7 +445,7 @@ def extra_properties_dict(node):
     extra_properties_dict['#Top concepts'] = topConcept_count
     return extra_properties_dict
 
-def restructre_missing_references(a_list):
+def restructure_missing_references(a_list):
     # Restructures the list of missing references
     return_list = []
     for i in a_list:
@@ -478,375 +677,3 @@ def type_analyse(list):
         for scheme in schemes:
             scheme_dict[scheme] = scheme_dict.get(scheme, 0) + 1
     return scheme_dict
-
-
-#TODO: update code to match current folder structure
-# break code in smaller defs.
-# def create_concept_list(root):
-#
-#     a_list = ['altLabel','prefLabel', 'broader', 'narrower', 'related', 'schemes', 'matches', 'change dates', 'notes']
-#     concept_list = []
-#
-#     for a_element in root:
-#         if a_element.tag[38:] == 'Concept':
-#             concept_dict = {}
-#             concept_id = str(a_element.attrib.items()[0][1][42:])
-#             concept_dict['id'] = concept_id
-#             topConcept_count = 0
-#             for item in a_list:
-#                 concept_dict[item] = []
-#             for prop in a_element:
-#                 prop_label = str(prop.tag[38:])
-#                 if prop_label == 'prefLabel':
-#                     prefLabel_dict = {}
-#                     lang = str(prop.attrib.items()[0][1])
-#                     label = str(prop.text.encode('utf-8'))
-#                     prefLabel_dict['language'] = lang
-#                     prefLabel_dict['Label'] = label
-#                     concept_dict['prefLabel'].append(prefLabel_dict)
-#                 elif prop_label == 'broader':
-#                     the_id = prop.attrib.items()[0][1][42:]
-#                     concept_dict['broader'].append(the_id)
-#                 elif prop_label == 'narrower':
-#                     the_id = prop.attrib.items()[0][1][42:]
-#                     concept_dict['narrower'].append(the_id)
-#                 elif prop_label == 'related':
-#                     the_id = prop.attrib.items()[0][1][42:]
-#                     concept_dict['related'].append(the_id)
-#                 elif prop_label == 'inScheme':
-#                     the_scheme = prop.attrib.items()[0][1][42:]
-#                     concept_dict['schemes'].append(the_scheme)
-#                 elif prop_label == 'exactMatch':
-#                     match = prop.attrib.items()[0][1]
-#                     concept_dict['matches'].append(match)
-#                 elif prop_label == 'altLabel':
-#                     altLabel_dict = {}
-#                     lang = str(prop.attrib.items()[0][1])
-#                     label = str(prop.text.encode('utf-8'))
-#                     altLabel_dict['language'] = lang
-#                     altLabel_dict['Label'] = label
-#                     if 'altLabel' in concept_dict:
-#                         concept_dict['altLabel'].append(altLabel_dict)
-#                     else:
-#                         concept_dict['altLabel'] = []
-#                         concept_dict['altLabel'].append(altLabel_dict)
-#                 elif prop_label == 'changeNote':
-#                     for item in prop:
-#                         for a_date in item:
-#                             change_date = a_date.text
-#                             concept_dict['change dates'].append(change_date)
-#                 elif prop_label == 'scopeNote':
-#                     the_note = prop.text
-#                     concept_dict['notes'].append(the_note)
-#                 elif prop_label == 'topConceptOf':
-#                     topConcept_count += 1
-#                 concept_dict['#Top Concepts'] = topConcept_count
-#             concept_list.append(concept_dict)
-#     return concept_list
-#
-# def average_label (language):
-#     total_concepts = 0
-#     all_label_length = 0
-#     for concept in concept_list:
-#         number_of_labels = 0
-#         total_label_length = 0
-#         for label in concept['prefLabel']:
-#             if label['language'] == language:
-#                 number_of_labels += 1
-#                 total_label_length += len(label['Label'])
-#         if number_of_labels > 0:
-#             total_concepts += 1
-#             average_label_length = total_label_length/float(number_of_labels)
-#             all_label_length += average_label_length
-#
-#     final_average = all_label_length/float(total_concepts)
-#     return final_average
-#
-# def plot_dates(dictionary, list):
-#     df = pd.DataFrame(dictionary)
-#     if len(list) == 1:
-#         item = list[0]
-#         if item == 'day':
-#             df.groupby(df['date'].dt.day).count().plot(kind="bar")
-#         elif item == 'month':
-#             df.groupby(df['date'].dt.month).count().plot(kind="bar")
-#         elif item == 'year':
-#             df.groupby(df['date'].dt.year).count().plot(kind="bar")
-#     elif len(list) == 2:
-#         list.sort()
-#         item1 = list[0]
-#         item2 = list[1]
-#         if item1 == 'day' and item2 == 'month':
-#             df.groupby([df['date'].dt.day, df['date'].dt.month]).count().plot(kind="bar")
-#         elif item1 == 'day' and item2 == 'year':
-#             df.groupby([df['date'].dt.day, df['date'].dt.year]).count().plot(kind="bar")
-#         elif item1 == 'month' and item2 == 'year':
-#             df.groupby([df['date'].dt.month, df['date'].dt.year]).count().plot(kind="bar")
-#     elif len(list) == 3:
-#         list.sort()
-#         df.groupby([df['date'].dt.day, df['date'].dt.month, df['date'].dt.year]).count().plot(kind="bar")
-#     else:
-#         if len(list) < 1:
-#             print 'Too few list inputs'
-#         else:
-#             print 'Too many list inputs'
-#         return
-#     show()
-#
-# def hex_code_colors():
-#     a = hex(random.randrange(0,256))
-#     b = hex(random.randrange(0,256))
-#     c = hex(random.randrange(0,256))
-#     a = a[2:]
-#     b = b[2:]
-#     c = c[2:]
-#     if len(a)<2:
-#         a = "0" + a
-#     if len(b)<2:
-#         b = "0" + b
-#     if len(c)<2:
-#         c = "0" + c
-#     z = a + b + c
-#     return "#" + z.upper()
-#
-# def average_rel(dict):
-#     average = 0
-#     total = 0
-#     for i in dict:
-#         if i == 0:
-#             j = -1
-#         else:
-#             j = i
-#         total += dict[i]
-#         average += dict[i] * j
-# #         print average, total
-#     return average/float(total)
-#
-# def create_relation_dict(list):
-#     relations_dict = {}
-#     no_rel = 0
-#     total_broader = {}
-#     total_narrower = {}
-#     total_related = {}
-#     for concept in list:
-#         broader = concept['broader']
-#         narrower = concept['narrower']
-#         related = concept['related']
-#         number_broader = len(broader)
-#         number_narrower = len(narrower)
-#         number_related = len(related)
-#         relations_dict[concept['id']] = [number_broader, number_narrower, number_related]
-#         total = number_broader + number_narrower + number_related
-#         if total == 0:
-#             no_rel += 1
-#         else:
-#             if number_broader in total_broader:
-#                 total_broader[number_broader] += 1
-#             else:
-#                 total_broader[number_broader] = 1
-#             if number_narrower in total_narrower:
-#                 total_narrower[number_narrower] += 1
-#             else:
-#                 total_narrower[number_narrower] = 1
-#             if number_related in total_related:
-#                 total_related[number_related] += 1
-#             else:
-#                 total_related[number_related] = 1
-#     return relations_dict, no_rel, total_broader, total_narrower, total_related
-#
-# def create_relation_dict2(dict):
-#     relation_dict2 = {}
-#     for concept in dict:
-#         relations = dict[concept]
-#         string_relations = ""
-#         for i in relations:
-#             string_relations += str(i)
-#             string_relations += '-'
-#         string_relations = ''.join(string_relations.split())[:-1].upper()
-#         if string_relations in relation_dict2:
-#             relation_dict2[string_relations] += 1
-#         else:
-#             relation_dict2[string_relations] = 1
-#     # print len(relation_dict2), relation_dict2
-#     return relation_dict2
-#
-# def is_number(s):
-#     try:
-#         float(s)
-#         return True
-#     except ValueError:
-#         return False
-#
-# startTime = datetime.now()
-#
-# os.chdir('../thesaurus_export')
-#
-# tree = ET.parse('full_skos.rdf')
-# root = tree.getroot()
-#
-# writer = pd.ExcelWriter('Adlib_full.xlsx', engine='xlsxwriter')
-#
-# concept_list = create_concept_list(root)
-# # print concept_list[0]['matches']
-#
-# print len(concept_list)
-#
-# df_full = pd.DataFrame.from_dict(concept_list)
-# df_full.to_excel(writer, sheet_name='Full')
-# # print df_full[:1]
-#
-# relations_dict, no_rel, total_broader, total_narrower, total_related = create_relation_dict(concept_list)
-# relation_df = pd.DataFrame([total_broader, total_narrower, total_related], index=['Broader', 'Narrower', 'Related'])
-# # print relation_df
-# relation_df.to_excel(writer, sheet_name='Relation1')
-#
-# relation_dict2 = create_relation_dict2(relations_dict)
-#
-# # Print a table with the number of relations
-# relation_df2 = pd.DataFrame(relation_dict2.items(), columns=['B-N-R', '#'])
-# relation_df2 = relation_df2.sort_values(by=['#'], ascending=False)
-# # print relation_df2
-# relation_df2.to_excel(writer, sheet_name='Relation2')
-#
-# matches_dict = {}
-# concept_label_dict = {}
-# count_preflabel_dict = {}
-# count_altlabel_dict = {}
-# pref_language_dict = {}
-# alt_language_dict = {}
-# for concept in concept_list:
-#     concept_id = concept['id']
-#     matches = concept['matches']
-#     matches_dict[concept_id] = matches
-#     label_dict = {}
-#     pref = concept['prefLabel']
-#     alt = concept['altLabel']
-#     label_dict['pref'] = pref
-#     label_dict['alt'] = alt
-#     if len(pref) in count_preflabel_dict:
-#         count_preflabel_dict[len(pref)] += 1
-#     else:
-#         count_preflabel_dict[len(pref)] = 1
-#     if len(alt) in count_altlabel_dict:
-#         count_altlabel_dict[len(alt)] += 1
-#     else:
-#         count_altlabel_dict[len(alt)] = 1
-#     label_dict['#pref'] = len(pref)
-#     label_dict['#alt'] = len(alt)
-#     pref_language_list = []
-#     for i in pref:
-#         language = i['language']
-#         pref_language_list.append(language)
-#         if language in pref_language_dict:
-#             pref_language_dict[language] += 1
-#         else:
-#             pref_language_dict[language] = 1
-#     label_dict['Pref languages'] = pref_language_list
-#     alt_language_list = []
-#     for i in alt:
-#         language = i['language']
-#         alt_language_list.append(language)
-#         if language in alt_language_dict:
-#             alt_language_dict[language] += 1
-#         else:
-#             alt_language_dict[language] = 1
-#     label_dict['Alt languages'] = alt_language_list
-#     concept_label_dict[concept['id']] = label_dict
-# # print concept_label_dict
-# print count_preflabel_dict
-# print count_altlabel_dict
-# print alt_language_dict, pref_language_dict
-#
-# label_df = pd.DataFrame.from_dict(concept_label_dict, orient='index')
-# label_df.to_excel(writer, sheet_name='Labels')
-# oC = 0
-# tC = 0
-# qC = 0
-# for concept in concept_label_dict:
-#     concept = concept_label_dict[concept]
-#     if concept['#pref'] == 2:
-#         prefs = concept['pref']
-#         label1 = ''
-#         for label in prefs:
-#             if label1 == '':
-#                 label1 = label['Label']
-#             else:
-#                 label2 = label['Label']
-#         difference1 = len(label1) - len(label2)
-#         difference2 = len(label2) - len(label1)
-#         if difference1 > 5 or difference2 > 5:
-#             if '(' in label1:
-#                 oC +=1
-# #                 print 'one', label1, label2
-#             elif '(' in label2:
-#                 tC += 1
-# #                 print 'two', label2, label1
-#             else:
-#                 qC += 1
-# print oC, tC, qC
-#
-#
-#
-#
-# # print "The average length of a Dutch label is", average_label('nl')
-# # print "The average length of an English label is", average_label('en')
-# # print "Average amount of broader relations =", average_rel(total_broader)
-# # print "Average amount of narrower relations =", average_rel(total_narrower)
-# # print "Average amount of related relations =", average_rel(total_related)
-#
-#
-# no_matches = 0
-# aat_matches = 0
-# tgn_matches = 0
-# mimo_matches = 0
-# wiki_matches = 0
-# number_match = 0
-# geoname_matches =0
-# other_matches = 0
-# for concept in concept_list:
-#     if len(concept['matches']) == 0:
-#         no_matches += 1
-#     else:
-#         for match in concept['matches']:
-#             if 'aat' in match:
-#                 aat_matches += 1
-#             elif 'tgn' in match or 'TGN' in match:
-#                 tgn_matches += 1
-#             elif 'mimo' in match:
-#                 mimo_matches += 1
-#             elif 'wiki' in match:
-#                 wiki_matches += 1
-#             elif is_number(match):
-#                 number_match += 1
-#             elif 'geonames' in match:
-#                 geoname_matches += 1
-#             else:
-# #                 print concept['prefLabel'], match
-#                 other_matches += 1
-# number_matches_dict ={}
-# number_matches_dict['none'] = no_matches
-# number_matches_dict['AAT'] = aat_matches
-# number_matches_dict['TGN'] = tgn_matches
-# number_matches_dict['MIMO'] = mimo_matches
-# number_matches_dict['Wiki'] = wiki_matches
-# number_matches_dict['Numbers'] = number_match
-# number_matches_dict['Geonames'] = geoname_matches
-# number_matches_dict['other'] = other_matches
-# matches_df = pd.DataFrame(number_matches_dict.items(), columns=['Matches', '#'])
-# matches_df.to_excel(writer, sheet_name='Matches')
-#
-# # # Data to plot
-# # labels = 'AAT', 'TGN', 'MIMO', 'Wiki', 'Number','Geonames' ,'Other'
-# # matches = [aat_matches, tgn_matches, mimo_matches, wiki_matches, number_match, geoname_matches, other_matches]
-# # colors = ['blue', 'red', 'yellow', 'green', 'orange', 'purple', 'pink']
-# # # for i in range(len(matches)):
-# # #     colors.append(hex_code_colors())
-# # plt.pie(matches, colors=colors,autopct='%1.1f%%', shadow=True, startangle=140)
-# # plt.axis('equal')
-# # plt.legend(labels)
-# # plt.title('Matches with external sources')
-# # plt.show()
-#
-#
-#
-# print datetime.now() - startTime

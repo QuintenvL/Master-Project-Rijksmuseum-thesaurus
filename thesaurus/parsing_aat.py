@@ -1,8 +1,16 @@
-'''
-Created on 6 apr. 2018
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Parsing the AAT
 
-@author: Gebruiker
-'''
+Script which collects and analyses concepts of the AAT.
+"""
+
+__author__ = "Quinten van Langen"
+__version__ = "1.0.0"
+__license__ = "cc0-1.0"
+
+
 import urllib
 import os
 import xml.etree.ElementTree as ET
@@ -12,8 +20,6 @@ import csv
 import pickle
 from datetime import datetime
 from analyse import *
-
-
 
 # Dictionary of prefixes 
 prefixes = {'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#', 
